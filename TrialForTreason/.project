@@ -22,4 +22,10 @@
 		<nature>repast.simphony.eclipse.repast_simphony_nature</nature>
 		<nature>repast.simphony.statecharts.diagram.repast_simphony_statechart_nature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>SWI_PROLOG_LOC</name>
+			<value>file:/C:/Program%20Files/swipl</value>
+		</variable>
+	</variableList>
 </projectDescription>

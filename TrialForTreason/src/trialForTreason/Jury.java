@@ -5,6 +5,7 @@ package trialForTreason;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -26,47 +27,23 @@ import repast.simphony.util.SimUtilities;
  */
 public class Jury {
 
-	private ContinuousSpace<Object> space;
-	private Grid<Object> grid;
-	private boolean moved;
-	private int energy;
 	float propability_of_conviction;
 	float propability_of_non_conviction;
 
-	public Jury(ContinuousSpace<Object> space, Grid<Object> grid, int energy, float propability_of_conviction, float propability_of_non_conviction) {
-		this.space = space;
-		this.grid = grid;
-		this.energy = energy;
+	public Jury(float propability_of_conviction, float propability_of_non_conviction) {
 		this.propability_of_conviction = propability_of_conviction;
 		this.propability_of_non_conviction = propability_of_non_conviction;
 	}
+	
+	Logger log = Logger.getLogger(
+    		Citizen.class.getName());
+
 
 	@ScheduledMethod(start = 2, interval = 1)
 	public void step() {
-		// get the grid location of this Zombie
-		GridPoint pt = grid.getLocation(this);
-
-		// use the GridCellNgh class to create GridCells for
-		// the surrounding neighborhood.
-		GridCellNgh<Citizen> nghCreator = new GridCellNgh<Citizen>(grid, pt,
-				Citizen.class, 1, 1);
-		List<GridCell<Citizen>> gridCells = nghCreator.getNeighborhood(true);
-		SimUtilities.shuffle(gridCells, RandomHelper.getUniform());
-
-		GridPoint pointWithMostHumans = null;
-		int maxCount = -1;
-		for (GridCell<Citizen> cell : gridCells) {
-			if (cell.size() > maxCount) {
-				pointWithMostHumans = cell.getPoint();
-				maxCount = cell.size();
-			}
-		}
-//		moveTowards(pointWithMostHumans);
-//		infect();
-		if (energy > 20) {
+			log.info("---------------------------------------------------------------");
 			System.out.println("I'm a jury member");
-			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
-		}	
+			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);	
 	}
 	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {

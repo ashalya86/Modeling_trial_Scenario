@@ -23,13 +23,13 @@
   </editedStyles>
   <netStyles>
     <entry>
-      <string>infection network</string>
+      <string>social network</string>
       <string>repast.simphony.visualizationOGL2D.DefaultEdgeStyleOGL2D</string>
     </entry>
   </netStyles>
   <editedNetStyles>
     <entry>
-      <string>infection network</string>
+      <string>social network</string>
       <null/>
     </entry>
   </editedNetStyles>
@@ -63,7 +63,7 @@
       <type>continuous space</type>
     </repast.simphony.scenario.data.ProjectionData>
     <repast.simphony.scenario.data.ProjectionData>
-      <id>infection network</id>
+      <id>social network</id>
       <attributes/>
       <type>network</type>
     </repast.simphony.scenario.data.ProjectionData>
@@ -98,7 +98,7 @@
       </repast.simphony.visualization.continuous.ContinuousProjectionDescriptor>
     </entry>
     <entry>
-      <string>infection network</string>
+      <string>social network</string>
       <repast.simphony.visualization.engine.DefaultProjectionDescriptor>
         <proj reference="../../../../projections/repast.simphony.scenario.data.ProjectionData[2]"/>
         <props/>

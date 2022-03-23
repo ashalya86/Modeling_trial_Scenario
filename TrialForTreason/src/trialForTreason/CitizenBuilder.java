@@ -6,11 +6,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jpl7.Atom;
+import org.jpl7.JPL;
+import org.jpl7.Query;
+import org.jpl7.Term;
+
 import repast.simphony.context.Context;
 import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
+import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
@@ -29,11 +35,12 @@ import repast.simphony.util.ContextUtils;
 
 
 public class CitizenBuilder implements ContextBuilder<Object>{
-
 	@Override
 	public Context build(Context<Object> context) {
 		float propability_of_conviction  = (float) 1.0;
 		float propability_of_non_conviction = (float) 0.1;
+		String prologPath = "trialForTreason.rs/salientEvents.pl";
+		String[] events=new String[] {"announce_leader", "seeing_monument", "attending_rituals"};
 		
 		 Map<Double, Double> up_cascade_list = new HashMap<Double, Double>() {{
 		    	put(0.5, 0.6);
@@ -43,11 +50,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		    	put(0.9, 0.6);
 		    }};
 
-		context.setId("trialForTreason");
-
-		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>(
-				"infection network", context, true);
-		netBuilder.buildNetwork();
+		context.setId("trialForTreason");		
 
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder
 				.createContinuousSpaceFactory(null);
@@ -62,50 +65,44 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 						new SimpleGridAdder<Object>(), true, 50, 50));
 		
 		
-		
 		JurorsDecision jurors = new JurorsDecision ();
 //		try {
 //			propability = jurors.getResults();
 //
-
+	
 			Parameters params = RunEnvironment.getInstance().getParameters();
-			int zombieCount = (Integer) params.getValue("zombie_count");
-			System.out.println("jurors_count " + zombieCount );
-			for (int i = 0; i < zombieCount; i++) {
-				int energy = RandomHelper.nextIntFromTo(0, 30);
-				context.add(new Jury(space, grid, energy, propability_of_conviction, propability_of_non_conviction));
+			int jurorsCount = (Integer) params.getValue("jurors_count"); 
+			System.out.println("jurors_count " + jurorsCount );
+			for (int i = 0; i < jurorsCount; i++) {
+				context.add(new Jury(propability_of_conviction, propability_of_non_conviction));
 			}
 			
 			int humanCount = (Integer) params.getValue("human_count");
-			double siganlAccuracy = (double)((Integer) params.getValue("signal_accuracy"))/10;
-//			double siganlAccuracy = (Double) params.getValue("signal_accuracy");
-			System.out.println("siganlAccuracy " + siganlAccuracy);
+			double signalAccuracy = (double)((Integer) params.getValue("signal_accuracy"))/10;
+			System.out.println("signalAccuracy " + signalAccuracy);
 			System.out.println("citizen_count " + humanCount );
 			for (int i = 0; i < humanCount; i++) {
-				int energy = RandomHelper.nextIntFromTo(4, 10);
-				context.add(new Citizen(space, grid, energy, up_cascade_list, siganlAccuracy));
-			}
+				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, events));
+			}			
 //			
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
+//			// TODO Auto-generated catch block 
 //			e.printStackTrace();
 //		}
 
+			WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);		
+			NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>(
+					"social network", context, true); 
+			netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
+			netBuilder.buildNetwork();
 			
 		for (Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
 			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
-		}
-		
-		if (RunEnvironment.getInstance().isBatch()) {
-			RunEnvironment.getInstance().endAt(20);
-		}
-
+		}		
 		return context;
-	}
-	
-	
+	}	
 }

@@ -13,7 +13,7 @@
 									
 		/>
 			
-				<parameter name="zombie_count" displayName="Zombie Count" type="int" 
+				<parameter name="jurors_count" displayName="Jurors Count" type="int" 
 						defaultValue="5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
