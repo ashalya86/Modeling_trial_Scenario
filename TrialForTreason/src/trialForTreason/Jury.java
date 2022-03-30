@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import repast.simphony.context.Context;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.query.space.grid.GridCell;
 import repast.simphony.query.space.grid.GridCellNgh;
@@ -39,7 +40,7 @@ public class Jury {
     		Citizen.class.getName());
 
 
-	@ScheduledMethod(start = 2, interval = 1)
+	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
 	public void step() {
 			log.info("---------------------------------------------------------------");
 			System.out.println("I'm a jury member");

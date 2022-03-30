@@ -1,6 +1,7 @@
 package trialForTreason;
 import trialForTreason.Citizen;
 import trialForTreason.Jury;
+import trialForTreason.ControllerAgent;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 //		try {
 //			propability = jurors.getResults();
 //
-	
+		
 			Parameters params = RunEnvironment.getInstance().getParameters();
 			int jurorsCount = (Integer) params.getValue("jurors_count"); 
 			System.out.println("jurors_count " + jurorsCount );
@@ -78,12 +79,16 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			}
 			
 			int humanCount = (Integer) params.getValue("human_count");
-			double signalAccuracy = (double)((Integer) params.getValue("signal_accuracy"))/10;
+			double signalAccuracy = (double)params.getValue("signal_accuracy");
 			System.out.println("signalAccuracy " + signalAccuracy);
 			System.out.println("citizen_count " + humanCount );
 			for (int i = 0; i < humanCount; i++) {
 				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, events));
-			}			
+			}
+			
+			context.add(new ControllerAgent());
+											
+//			
 //			
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block

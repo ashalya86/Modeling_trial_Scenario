@@ -13,6 +13,7 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 
 import repast.simphony.context.Context;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
@@ -28,7 +29,7 @@ import repast.simphony.space.grid.GridPoint;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.util.SimUtilities;
 import java.util.logging.Logger;
-
+import java.util.Iterator;
 
 /**
  * @author nick
@@ -42,9 +43,10 @@ public class Citizen {
 	String[] events;
 	String prologPath;
 	int currentTick;
+	int cascadeIndex;
+	String action;
 
-	public Citizen(Map<Double, Double> up_cascade_list, double signal_accuracy, String prologPath, String[] events
-) {
+	public Citizen(Map<Double, Double> up_cascade_list, double signal_accuracy, String prologPath, String[] events) {
 		this.up_cascade_list = up_cascade_list;
 		this.signal_accuracy = signal_accuracy;
 		this.prologPath = prologPath;
@@ -54,7 +56,7 @@ public class Citizen {
 	Logger log = Logger.getLogger(
     		Citizen.class.getName());
 	
-	@ScheduledMethod(start = 1, interval = 1)
+	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
 	public void step() { 
 		Double tickcount = RepastEssentials.GetTickCount();
 		currentTick = tickcount.intValue();
@@ -62,7 +64,8 @@ public class Citizen {
 		System.out.println("Now I'm entering in to public space");
 		log.info("........................................................");
 		handShake();
-		entering_public_space(this.signal_accuracy, this.up_cascade_list, currentTick);			
+//		entering_public_space(this.signal_accuracy, this.up_cascade_list, currentTick);	
+		System.out.println("cascading action " + getCascadeAction());
 		}
 	
 	public void entering_public_space(double signal_accuracy, Map<Double, Double> up_cascade_list, int currentTick) {
@@ -95,8 +98,18 @@ public class Citizen {
 	}
 	
 	public void handShake() {
-//		Context context = ContextUtils.getContext(this);
 		System.out.println("hello, I am a citizen of Athens");
+	}
+	
+	
+	public void setCascadeAction(int cascadeIndex, String action) {
+		this.cascadeIndex = cascadeIndex;
+		this.action = action;
+		System.out.println("cascade event "+ action);
+	}
+	
+	public String getCascadeAction() {
+		return action;
 	}
 	
 	public Boolean seeing_monuments(double signal_accuracy, Map<Double, Double> up_cascade_list) {

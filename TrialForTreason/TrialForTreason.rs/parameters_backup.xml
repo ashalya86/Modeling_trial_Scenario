@@ -12,25 +12,22 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+			
 				<parameter name="jurors_count" displayName="Jurors Count" type="int" 
 						defaultValue="5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="signal_accuracy" displayName="Signal Accuracy" type="double" 
-						defaultValue="0.8" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-		<parameter name="controller_count" displayName="Controller Count" type="int" 
-						defaultValue="5" 
+		
+		<parameter name="signal_accuracy" displayName="Signal Accuracy" type="int" 
+						defaultValue="8" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				
+		
+		
 		</parameters>
 
 

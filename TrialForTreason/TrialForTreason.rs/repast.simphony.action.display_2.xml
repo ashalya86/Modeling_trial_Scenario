@@ -10,6 +10,11 @@
       <string>trialForTreason.Jury</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
+    <entry>
+      <string>trialForTreason.ControllerAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    
   </styles>
   <editedStyles>
     <entry>
@@ -18,6 +23,10 @@
     </entry>
     <entry>
       <string>trialForTreason.Jury</string>
+      <string>jzombies.Zombie.style_3.xml</string>
+    </entry>
+    <entry>
+      <string>trialForTreason.ControllerAgent</string>
       <string>jzombies.Zombie.style_3.xml</string>
     </entry>
   </editedStyles>
@@ -54,6 +63,10 @@
     <entry>
       <string>trialForTreason.Jury</string>
       <int>1</int>
+    </entry>
+    <entry>
+      <string>trialForTreason.ControllerAgent</string>
+      <int>2</int>
     </entry>
   </layerOrder>
   <projections>
