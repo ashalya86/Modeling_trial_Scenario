@@ -5,7 +5,7 @@ attended_action(A, E, T):-
 salient(A, E, T):-
 	counts_as(A, E, cooperate(G), T).
 
-counts_as(A, announced _leader, cooperate(secure_city), T).
+counts_as(A, announced_leader, cooperate(secure_city), T).
 counts_as(A, seeing_monument, cooperate(secure_city), T).
 counts_as(A, attending_rituals, cooperate(secure_city), T). 
 

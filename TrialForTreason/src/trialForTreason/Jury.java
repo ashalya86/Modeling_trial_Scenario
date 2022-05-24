@@ -42,9 +42,10 @@ public class Jury {
 
 	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
 	public void step() {
-			log.info("---------------------------------------------------------------");
-			System.out.println("I'm a jury member");
-			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);	
+//			log.info("*************************************************************");
+//			System.out.println("I'm a jury member");
+//			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
+//			log.info("*************************************************************");
 	}
 	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {

@@ -4,6 +4,7 @@
 package trialForTreason;
 
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,27 +46,36 @@ public class Citizen {
 	int currentTick;
 	int cascadeIndex;
 	String action;
+	int humanCount;
 
-	public Citizen(Map<Double, Double> up_cascade_list, double signal_accuracy, String prologPath, String[] events) {
+	public Citizen(Map<Double, Double> up_cascade_list, double signal_accuracy, String prologPath, String[] events, int humanCount) {
 		this.up_cascade_list = up_cascade_list;
 		this.signal_accuracy = signal_accuracy;
 		this.prologPath = prologPath;
 		this.events = events;
+		this.humanCount = humanCount;
 	}
 	
 	Logger log = Logger.getLogger(
     		Citizen.class.getName());
 	
 	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
-	public void step() { 
+	public void step() throws IOException { 
+		log.info("........................................................");
 		Double tickcount = RepastEssentials.GetTickCount();
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
-		System.out.println("Now I'm entering in to public space");
+//		System.out.println("Now I'm entering in to public space");
+		handShake(humanCount);
+//		entering_public_space(this.signal_accuracy, this.up_cascade_list, currentTick);
+		event = getCascadeAction();
+		System.out.println("I'm informed by a general to follow  " + event);
+		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.event, this.currentTick, this.humanCount);
+		boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount);
+		if (result == true) {
+			System.out.println(event + " event is salient");
+		}
 		log.info("........................................................");
-		handShake();
-//		entering_public_space(this.signal_accuracy, this.up_cascade_list, currentTick);	
-		System.out.println("cascading action " + getCascadeAction());
 		}
 	
 	public void entering_public_space(double signal_accuracy, Map<Double, Double> up_cascade_list, int currentTick) {
@@ -97,8 +107,8 @@ public class Citizen {
   			}
 	}
 	
-	public void handShake() {
-		System.out.println("hello, I am a citizen of Athens");
+	public void handShake(int humanCount) {
+		System.out.println("hello, I am a citizen " + humanCount);
 	}
 	
 	

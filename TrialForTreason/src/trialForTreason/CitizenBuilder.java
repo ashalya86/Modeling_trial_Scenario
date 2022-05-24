@@ -40,7 +40,8 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 	public Context build(Context<Object> context) {
 		float propability_of_conviction  = (float) 1.0;
 		float propability_of_non_conviction = (float) 0.1;
-		String prologPath = "trialForTreason.rs/salientEvents.pl";
+		String prologPath = "src/trialForTreason/cascadings.pl";
+//		String prologPath = "trialForTreason.rs/salientEvents.pl";
 		String[] events=new String[] {"announce_leader", "seeing_monument", "attending_rituals"};
 		
 		 Map<Double, Double> up_cascade_list = new HashMap<Double, Double>() {{
@@ -83,7 +84,8 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			System.out.println("signalAccuracy " + signalAccuracy);
 			System.out.println("citizen_count " + humanCount );
 			for (int i = 0; i < humanCount; i++) {
-				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, events));
+				//Query.hasSolution("between(1, N, ?), atomic_contact(citizen, N, CitN), assert(member(CitN, citizen))", new org.jpl7.Integer(humanCount));
+				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, events, humanCount));
 			}
 			
 			context.add(new ControllerAgent());

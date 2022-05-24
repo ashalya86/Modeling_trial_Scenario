@@ -21,30 +21,27 @@ public class ControllerAgent {
 	}
 
 	Map<Integer, String> cascading_events = new HashMap<Integer, String>() {{
-    	put(1, "attending_public_rituals");
-    	put(2, "seeing_traitor_monument_22");
-    	put(3, "honoring_heroic_warriors");
-    	put(4, "hearing_public_announcement");
-    	put(5, "seeing_traitor_monument_57");
+    	put(0, "buildingWalls");
+    	put(1, "makingTrenches");
+    	put(2, "makingPalisades");
     }};
 
 @ScheduledMethod(start = 1, interval = 1)
 	public void step() {
-	System.out.println("controller agent step() ###################################");
 		cascadeAction(cascading_events);	
 	}
 	
 	
 	public void cascadeAction(Map<Integer, String> cascading_events) {
 		Random randy = new Random();
-		actionNo = randy.nextInt(6);
+		actionNo = randy.nextInt(2);
 		Context context = ContextUtils.getContext(this);
 		Iterable<Citizen> i = context.getAgentLayer(Citizen.class);
 	      Iterator<Citizen> it = i.iterator();
 	      int cascadeIndex = 1; 
 	      while (it.hasNext())
 	      {
-	  		System.out.println("controller agent ###################################");
+	  		System.out.println("controller agent, "+ actionNo);
 	            Citizen c = it.next();  
 	            action = cascading_events.get(actionNo);
 	            c.setCascadeAction(cascadeIndex, action);

@@ -599,3 +599,182 @@ java.lang.IllegalArgumentException: Number of nodes must be greater than 10
 	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
 	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
 	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+FATAL [Thread-10] 2022-04-25 11:41:51,636 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.PrologException: PrologException: error(existence_error(source_sink, 'src/cascading.pl'), _0)
+	at org.jpl7.Query.fetchNextSolution(Query.java:438)
+	at org.jpl7.Query.hasMoreSolutions(Query.java:342)
+	at org.jpl7.Query.oneSolution(Query.java:872)
+	at org.jpl7.Query.hasSolution(Query.java:950)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:29)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-04-25 11:42:49,360 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.PrologException: PrologException: error(permission_error(modify, static_procedure, '/'(action, 3)), context(':'(system, '/'(assert, 1)), _3))
+	at org.jpl7.Query.fetchNextSolution(Query.java:438)
+	at org.jpl7.Query.hasMoreSolutions(Query.java:342)
+	at org.jpl7.Query.hasNext(Query.java:240)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:32)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-04-25 11:50:08,762 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (4.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.JPLException: cannot construct with null name
+	at org.jpl7.Atom.<init>(Atom.java:72)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:36)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-04-25 11:55:35,753 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (9.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.JPLException: cannot construct with null name
+	at org.jpl7.Atom.<init>(Atom.java:72)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:36)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-04-25 12:04:30,557 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (5.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.JPLException: cannot construct with null name
+	at org.jpl7.Atom.<init>(Atom.java:72)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:36)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-04-25 12:05:44,113 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (3.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.JPLException: cannot construct with null name
+	at org.jpl7.Atom.<init>(Atom.java:72)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:36)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-05-23 12:36:35,987 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: org.jpl7.PrologException: PrologException: error(existence_error(procedure, ':'(baseKB, '/'(attended_action, 2))), context(':'(system, '/'('$c_call_prolog', 0)), _0))
+	at org.jpl7.Query.fetchNextSolution(Query.java:438)
+	at org.jpl7.Query.hasMoreSolutions(Query.java:342)
+	at org.jpl7.Query.oneSolution(Query.java:872)
+	at org.jpl7.Query.hasSolution(Query.java:950)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:53)
+	at trialForTreason.Citizen.step(Citizen.java:73)
+	... 10 more
+FATAL [Thread-10] 2022-05-24 13:43:51,141 repast.simphony.ui.GUIScheduleRunner - RunTimeException when running the schedule
+Current tick (2.0)
+java.lang.RuntimeException: java.lang.reflect.InvocationTargetException
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:72)
+	at repast.simphony.engine.controller.ScheduledMethodControllerAction$ScheduleMethodAllAction.execute(ScheduledMethodControllerAction.java:333)
+	at repast.simphony.engine.schedule.DefaultAction.execute(DefaultAction.java:38)
+	at repast.simphony.engine.schedule.ScheduleGroup.executeList(ScheduleGroup.java:205)
+	at repast.simphony.engine.schedule.ScheduleGroup.execute(ScheduleGroup.java:238)
+	at repast.simphony.engine.schedule.Schedule.execute(Schedule.java:352)
+	at repast.simphony.ui.GUIScheduleRunner$ScheduleLoopRunnable.run(GUIScheduleRunner.java:52)
+	at java.lang.Thread.run(Thread.java:813)
+Caused by: java.lang.reflect.InvocationTargetException
+	at trialForTreason.Citizen$$FastClassByCGLIB$$3aaf28bf.invoke(<generated>)
+	at net.sf.cglib.reflect.FastMethod.invoke(FastMethod.java:53)
+	at repast.simphony.engine.schedule.DynamicTargetAction.execute(DynamicTargetAction.java:69)
+	... 7 more
+Caused by: java.lang.NullPointerException
+	at java.io.File.<init>(File.java:277)
+	at trialForTreason.HisSaver.readWordsFromFile(HisSaver.java:52)
+	at trialForTreason.HisSaver.<init>(HisSaver.java:21)
+	at trialForTreason.HisSaver.getInstance(HisSaver.java:26)
+	at trialForTreason.FindingSalientEvent.resultOfSalient(FindingSalientEvent.java:37)
+	at trialForTreason.Citizen.step(Citizen.java:74)
+	... 10 more
