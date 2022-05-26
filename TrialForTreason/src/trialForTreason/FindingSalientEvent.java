@@ -27,34 +27,32 @@ public class FindingSalientEvent {
 		this.humanCount = humanCount;
 	}
 	
-	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount) throws IOException {
-		HisSaver hs = HisSaver.getInstance(prologPath);
-		hs.saveWord(":-add_PFC((prim_action(citizen"+ humanCount + "," +  event + "))).");
-		hs.saveWord(":-add_PFC((counts_as(" + event + ", cooperate(secureCity)))).");
-		hs.saveWord(":-add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
-
+	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount, String[] salientEvents) throws IOException {
 		Query q1 = 
 			    new Query( 
 				"consult", 
 				new Term[] {new Atom(prologPath)} 
 			    );
-		System.out.println( "consult " + q1.hasSolution() );
-
+				q1.hasSolution() ;
+		
+		for (int i = 0; i < salientEvents.length; i++) {
+			if (event == salientEvents[i]) {
+				Query query1 = new Query ("add_PFC((counts_as(" + event + ", cooperate(secureCity))))");
+				query1.hasSolution();
+				Query query2 = new Query ("add_PFC((prim_action(citizen"+ humanCount + "," +  event + "))).");
+				query2.hasSolution();
+			}	
+		}
+		
+		Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
+		q4.hasSolution(); 
+		
 		Query citizenAttendedAction = new Query("baseKB:attended_action(citizen" + humanCount + ",cooperate(secureCity)).");
 		Query assemblyAttendedAction = new Query("baseKB:attended_action(assembly, decree(group_goal(citizens, secureCity)))"); 
 		result1 = citizenAttendedAction.hasSolution();
 	    result2 = assemblyAttendedAction.hasSolution();
-	    System.out.println("..............." + assemblyAttendedAction.hasSolution());
-		return result2;
+		return result1;
 	}
 	
-//	public static Query[] returningQueries(String[] events, Query[] queries, int currentTick) {	
-//		String[] actions= new String[events.length];
-//		for (int i=0; i<events.length; i++) {
-//    		actions[i] = "assert(action(A,"+ events[i]+ "," + currentTick +")).";
-//        	queries[i] = new Query(actions[i]);
-//    	}		
-//		 return queries ;
-//	}	
 }	
 

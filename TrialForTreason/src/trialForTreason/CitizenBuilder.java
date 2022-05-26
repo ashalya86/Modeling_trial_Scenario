@@ -42,8 +42,8 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		float propability_of_non_conviction = (float) 0.1;
 		String prologPath = "src/trialForTreason/cascadings.pl";
 //		String prologPath = "trialForTreason.rs/salientEvents.pl";
-		String[] events=new String[] {"announce_leader", "seeing_monument", "attending_rituals"};
-		
+	     String[] salientEvents ={"buildingWalls", "makingPalisades"};
+
 		 Map<Double, Double> up_cascade_list = new HashMap<Double, Double>() {{
 		    	put(0.5, 0.6);
 		    	put(0.6, 0.4);
@@ -51,6 +51,8 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		    	put(0.8, 0.7);
 		    	put(0.9, 0.6);
 		    }};
+		    
+
 
 		context.setId("trialForTreason");		
 
@@ -79,17 +81,19 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 				context.add(new Jury(propability_of_conviction, propability_of_non_conviction));
 			}
 			
+			
 			int humanCount = (Integer) params.getValue("human_count");
 			double signalAccuracy = (double)params.getValue("signal_accuracy");
 			System.out.println("signalAccuracy " + signalAccuracy);
 			System.out.println("citizen_count " + humanCount );
+			
+			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));											
+			
 			for (int i = 0; i < humanCount; i++) {
-				//Query.hasSolution("between(1, N, ?), atomic_contact(citizen, N, CitN), assert(member(CitN, citizen))", new org.jpl7.Integer(humanCount));
-				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, events, humanCount));
+				
+				context.add(new Citizen(up_cascade_list, signalAccuracy,  prologPath, salientEvents, i));
 			}
 			
-			context.add(new ControllerAgent());
-											
 //			
 //			
 //		} catch (IOException e) {

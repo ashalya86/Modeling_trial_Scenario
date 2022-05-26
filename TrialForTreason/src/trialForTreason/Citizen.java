@@ -5,6 +5,7 @@ package trialForTreason;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,10 @@ public class Citizen {
 	int cascadeIndex;
 	String action;
 	int humanCount;
+	ArrayList<String> cascading_events;
+	Query [] primitiveActionsQueries;
+	String[] salientEvents;
+
 
 	public Citizen(Map<Double, Double> up_cascade_list, double signal_accuracy, String prologPath, String[] events, int humanCount) {
 		this.up_cascade_list = up_cascade_list;
@@ -56,71 +61,66 @@ public class Citizen {
 		this.humanCount = humanCount;
 	}
 	
+	public Citizen () {
+		
+	}
+	
 	Logger log = Logger.getLogger(
     		Citizen.class.getName());
 	
-	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
+	@ScheduledMethod(start = 1, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
 	public void step() throws IOException { 
 		log.info("........................................................");
 		Double tickcount = RepastEssentials.GetTickCount();
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
-//		System.out.println("Now I'm entering in to public space");
 		handShake(humanCount);
-//		entering_public_space(this.signal_accuracy, this.up_cascade_list, currentTick);
-		event = getCascadeAction();
+		event = getCascadeAction().get(humanCount);
+		salientEvents = getsalientAction();
 		System.out.println("I'm informed by a general to follow  " + event);
 		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.event, this.currentTick, this.humanCount);
-		boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount);
+		boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
 		if (result == true) {
 			System.out.println(event + " event is salient");
+		}
+		else {
+			System.out.println(event + " event is not salient");
 		}
 		log.info("........................................................");
 		}
 	
-	public void entering_public_space(double signal_accuracy, Map<Double, Double> up_cascade_list, int currentTick) {
-		System.out.println("Now I'm entering in to public space");
-		int eventNumber = RandomHelper.nextIntFromTo(4, 10);
-		if (eventNumber == 5) {
-			event = "birds_flying";
-			System.out.println("I'm seeing birds_flying");
-		}else if(eventNumber == 6) {
-			event = "attending_rituals";
-			System.out.println("I'm  attending rituals");
-		}else if(eventNumber == 7) {
-			event = "seeing_monument";
-			System.out.println("I'm seeing traitor monuments");
-		}
-		else {
-			event = "people_walking";
-			System.out.println("I'm seeing people are walking around me");
-		}
 		
-//    	System.out.println( "consult " + q1.hasSolution() );
-		SalientEventsProlog salientEvent = new SalientEventsProlog(this.events, this.prologPath, event, currentTick);
-		String result = salientEvent.resultOfSalient(this.prologPath, event, currentTick);
-		System.out.println( "event " + event + " is " + result);
-
-  			if (result == "salient" && event == "seeing_monument" && seeing_monuments(signal_accuracy, up_cascade_list)) {
-  				
-  		    	System.out.println( "************I'll secure city*********" );  				
-  			}
-	}
-	
 	public void handShake(int humanCount) {
 		System.out.println("hello, I am a citizen " + humanCount);
 	}
 	
 	
-	public void setCascadeAction(int cascadeIndex, String action) {
-		this.cascadeIndex = cascadeIndex;
-		this.action = action;
-		System.out.println("cascade event "+ action);
+	public void setCascadeAction(ArrayList<String> cascading_events, String [] salientEvents) {
+		this.cascading_events = cascading_events;
+		this.salientEvents = salientEvents;
+		System.out.println("cascade event "+ cascading_events);
+
 	}
 	
-	public String getCascadeAction() {
-		return action;
+	public ArrayList<String> getCascadeAction() {
+		return cascading_events ;
 	}
+	
+	public String[] getsalientAction() {
+		return salientEvents ;
+	}
+	
+	
+	public void setPremitiveAction(Query [] primitiveActionsQueries) {
+		this.primitiveActionsQueries = primitiveActionsQueries;
+	}
+	
+	public Query []  getPremitiveAction () {
+		return primitiveActionsQueries;
+	}
+	
+	
+	
 	
 	public Boolean seeing_monuments(double signal_accuracy, Map<Double, Double> up_cascade_list) {
 		return (up_cascade_list.get(signal_accuracy) > 0.6) ;	

@@ -37,6 +37,4 @@ prim_action(A, X), counts_as(X, Y) ==> action(A, Y)
 prim_action(assembly, decree(group_goal(citizens, secureCity)))
 )).
 
-:-add_PFC((prim_action(citizen10,makingTrenches))).
-:-add_PFC((counts_as(makingTrenches, cooperate(secureCity)))).
-:-add_PFC((group_member(citizen10, citizens))).
+
