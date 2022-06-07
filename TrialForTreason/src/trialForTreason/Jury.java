@@ -30,6 +30,11 @@ public class Jury {
 
 	float propability_of_conviction;
 	float propability_of_non_conviction;
+	int salientEventRejectors;
+	
+	public Jury() {
+		
+	}
 
 	public Jury(float propability_of_conviction, float propability_of_non_conviction) {
 		this.propability_of_conviction = propability_of_conviction;
@@ -42,10 +47,20 @@ public class Jury {
 
 	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
 	public void step() {
-//			log.info("*************************************************************");
-//			System.out.println("I'm a jury member");
+			log.info("*************************************************************");
+			System.out.println("I'm a jury member" + getCountDownCascade());
+			
+			
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
+	}
+	
+	public void setCountDownCascade (int salientEventRejectors) {
+		this.salientEventRejectors = salientEventRejectors;
+	}
+	
+	public int getCountDownCascade () {
+		return salientEventRejectors;
 	}
 	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {

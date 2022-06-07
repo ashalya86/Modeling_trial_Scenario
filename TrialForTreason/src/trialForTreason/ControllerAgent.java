@@ -56,18 +56,16 @@ public class ControllerAgent {
 		cascadeAction(this.cascading_events);
 		
 	}
-	
-   
+	  
 	public void cascadeAction(ArrayList<String> cascading_events) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Citizen> i = context.getAgentLayer(Citizen.class);
 	      Iterator<Citizen> it = i.iterator();
-	      int cascadeIndex = 1; 
+	      int cascadeIndex = 0; 
 	      while (it.hasNext())
 	      {
-	  		System.out.println("controller agent, "+ actionNo);
 	            Citizen c = it.next();  
-	            c.setCascadeAction(this.cascading_events, this.salientEvents);
+	            c.setCascadeAction(cascading_events.get(cascadeIndex), this.salientEvents);
 	            cascadeIndex++;
 	      }      
 	}
