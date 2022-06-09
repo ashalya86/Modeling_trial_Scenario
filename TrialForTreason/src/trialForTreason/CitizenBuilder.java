@@ -42,16 +42,8 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		float propability_of_conviction  = (float) 1.0;
 		float propability_of_non_conviction = (float) 0.1;
 		String prologPath = "src/trialForTreason/cascadings.pl";
-	     String[] salientEvents ={"buildingWalls", "makingPalisades"};
-
-		 Map<Double, Double> up_cascade_list = new HashMap<Double, Double>() {{
-		    	put(0.5, 0.6);
-		    	put(0.6, 0.4);
-		    	put(0.7, 0.9);
-		    	put(0.8, 0.3);
-		    	put(0.9, 0.6);
-		    }};
-		    
+	    String[] salientEvents ={"buildingWalls", "makingPalisades"};
+	    String [] actions  = {"A", "R","A", "A", "A", "A", "A", "A", "A", "A"};
 
 		context.setId("trialForTreason");		
 
@@ -81,9 +73,6 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			System.out.println("citizen_count " + humanCount );
 			
 			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));											
-			double cascading_ratio =  up_cascade_list.get(signalAccuracy);
-			System.out.println("cascading_ratio " + cascading_ratio );
-			String [] actions = creating_actions(humanCount, cascading_ratio);
 			
 			for (int i = 0; i < humanCount; i++) {	
 				context.add(new Citizen(actions[i],  prologPath, salientEvents, i));

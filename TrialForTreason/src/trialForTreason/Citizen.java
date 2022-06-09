@@ -49,8 +49,9 @@ public class Citizen {
 	ArrayList<String> cascading_events;
 	Query [] primitiveActionsQueries;
 	String[] salientEvents;
-	int salientEventRejectors;
+	int salientEventAdopters;
 	String cascadingEvent;
+	int Count;
 
 
 	public Citizen(String action, String prologPath, String[] events, int humanCount) {
@@ -58,7 +59,7 @@ public class Citizen {
 		this.prologPath = prologPath;
 		this.events = events;
 		this.humanCount = humanCount;
-//		salientEventRejectors = 0;
+		this.salientEventAdopters = 0;
 	}
 	
 	public Citizen () {
@@ -75,32 +76,41 @@ public class Citizen {
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
-//		event = getCascadeAction().get(humanCount);
 		event = getCascadeAction();
 		salientEvents = getsalientAction();
 		System.out.println("I'm informed by a general to follow  " + event);
 		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.event, this.currentTick, this.humanCount);
 		boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
-		if (result == true && action == "adopt") {
+		if (result == true && action == "A") {
 			System.out.println(event + " event is salient and I'm adopting" );
+			countSalientEventAdopters(1) ;
 		}
-		else if (result == true && action == "reject") {
-			System.out.println(event + " event is salient and I'm rejecting" );
-			salientEventRejectors += 1;
-			countDownCascade(salientEventRejectors);
+		else if (result == true && action == "R") {
+			System.out.println(event + " event is salient but I'm rejecting" );
 		}
-		else if (result == false && action == "adopt") {
+		else if (result == false && action == "A") {
 			System.out.println(event + " event is not salient and I'm adopting");	
 		}
 		else {
 			System.out.println(event + " event is not salient and I'm rejecting");
 		}
-		System.out.println("salientEventRejectors "+ salientEventRejectors);
-		//....
 		log.info("........................................................");
 		}
 	
 		
+	public void countSalientEventAdopters(int count) {
+		Context context = ContextUtils.getContext(this);
+		Iterable<Jury> i = context.getAgentLayer(Jury.class);
+	      Iterator<Jury> it = i.iterator();
+	      int index = 0; 
+	      while (it.hasNext())
+	      {
+	    	  Jury j = it.next();  
+	          j.setCountSalientEventAdopters(count);
+	          index++;
+	      }      
+	}
+	
 	public void handShake(int humanCount) {
 		System.out.println("hello, I am a citizen " + humanCount);
 	}
@@ -127,14 +137,17 @@ public class Citizen {
 		return primitiveActionsQueries;
 	}
 	
-	public Boolean seeing_monuments(double signal_accuracy, Map<Double, Double> up_cascade_list) {
-		return (up_cascade_list.get(signal_accuracy) > 0.6) ;	
-	}
-	
-	
-	public void countDownCascade(int salientEventRejectors) {
-		Jury j = new Jury ();
-		j.setCountDownCascade(salientEventRejectors);
+	public void countSalientEventRejectors() {
+		Context context = ContextUtils.getContext(this);
+		Iterable<Citizen> i = context.getAgentLayer(Citizen.class);
+	      Iterator<Citizen> it = i.iterator();
+	      int cascadeIndex = 0; 
+	      while (it.hasNext())
+	      {
+	            Citizen c = it.next();  
+//	            c.setCascadeAction(cascading_events.get(cascadeIndex), this.salientEvents);
+	            cascadeIndex++;
+	      }      
 	}
 	
 		

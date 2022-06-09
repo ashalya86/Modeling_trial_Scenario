@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.query.space.grid.GridCell;
 import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.random.RandomHelper;
@@ -30,7 +31,7 @@ public class Jury {
 
 	float propability_of_conviction;
 	float propability_of_non_conviction;
-	int salientEventRejectors;
+	int salientEventAdopters;
 	
 	public Jury() {
 		
@@ -45,22 +46,18 @@ public class Jury {
     		Citizen.class.getName());
 
 
-	@ScheduledMethod(start = 2, interval = 1, priority=ScheduleParameters.LAST_PRIORITY)
+	@ScheduledMethod(start = 2, interval = 1)
 	public void step() {
 			log.info("*************************************************************");
-			System.out.println("I'm a jury member" + getCountDownCascade());
-			
-			
+			Double tickcount = RepastEssentials.GetTickCount();
+			int currentTick = tickcount.intValue();
+			System.out.println("I'm a jury member observing " + getCountSalientEventAdopters() + " adopters at tick " + currentTick );		
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
 	}
-	
-	public void setCountDownCascade (int salientEventRejectors) {
-		this.salientEventRejectors = salientEventRejectors;
-	}
-	
-	public int getCountDownCascade () {
-		return salientEventRejectors;
+		
+	public int getCountSalientEventAdopters () {
+		return salientEventAdopters;
 	}
 	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {
@@ -70,4 +67,8 @@ public class Jury {
 				System.out.println("Do not convict Leocrates");	
 				}
 			}
+	public void setCountSalientEventAdopters(int count) {
+		this.salientEventAdopters += count;
+	}
+	
 }
