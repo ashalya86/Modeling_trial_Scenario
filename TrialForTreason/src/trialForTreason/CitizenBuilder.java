@@ -104,35 +104,4 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		}		
 		return context;
 	}
-	
-	
-	public static String [] creating_actions(int humanCount, double cascading_ratio) {
-        String [] actions = new String[humanCount];
-        Random rand = new Random();
-		double no_of_rejects = humanCount - (cascading_ratio * humanCount);
-		int count = 0;
-		String action;
-		for (int i = 0; i < humanCount; i++) {
-			int num = rand.nextInt(2);
-			if (num == 0) {
-				 action = "reject";
-				 actions[i] = action;
-				 count += 1;
-				if (count == no_of_rejects) {
-					break;
-				}
-			}else {				
-				 action = "adopt";	
-				 actions[i] = action;
-			}	
-		}
-
-		for (int i = 0; i < humanCount; i++) {
-			if (actions[i] == null) {
-				actions[i] = "adopt";
-			}				
-		}
-        return actions;
-	}
-
 }
