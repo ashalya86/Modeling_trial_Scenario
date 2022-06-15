@@ -10,28 +10,47 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 
 public class FindingSalientEvent {
-	String[] events;
+	String[] salientEvents;
 	String prologPath;
 	boolean result1;
 	boolean result2;
 	String event;
 	int currentTick;
 	int humanCount;
+	Query q1;
+	Query q2;
+	Query q3;
 	
-	public FindingSalientEvent(String prologPath, String event, int currentTick, int humanCount) {
+	public FindingSalientEvent(String prologPath, int currentTick, int humanCount, String[] salientEvents) {
 		this.prologPath = prologPath;
-		this.event = event;
+//		this.event = event;
 		this.currentTick = currentTick;
 		this.humanCount = humanCount;
-	}
-	
-	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount, String[] salientEvents) throws IOException {
-		Query q1 = 
+		this.salientEvents = salientEvents;
+		
+		this.q1 = 
 			    new Query( 
 				"consult", 
 				new Term[] {new Atom(prologPath)} 
-			    );
-				q1.hasSolution() ;
+			    );	
+	}
+	
+	
+	public java.util.Map<String,Term>[] gettingCountAsEvents() {
+		this.q1.hasSolution() ;
+
+		for (int i = 0; i < salientEvents.length; i++) {
+			this.q2 = new Query ("add_PFC((counts_as(" + salientEvents[i] + ", cooperate(secureCity))))");
+			q2.hasSolution();
+		}
+		Query queryCountAsEvents = new Query("baseKB:counts_as(A,X).");
+		java.util.Map<String,Term>[] solutions = queryCountAsEvents.allSolutions();
+		
+	return 	solutions;
+	}
+	
+	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount, String[] salientEvents) throws IOException {
+				this.q1.hasSolution() ;
 		
 		for (int i = 0; i < salientEvents.length; i++) {
 			if (event == salientEvents[i]) {
@@ -44,6 +63,12 @@ public class FindingSalientEvent {
 		
 		Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
 		q4.hasSolution(); 
+		
+		Query queryCountAsEvents = new Query("baseKB:counts_as(A,X).");
+		java.util.Map<String,Term>[] solutions = queryCountAsEvents.allSolutions();
+		for ( int i=0 ; i < solutions.length ; i++ ) { 
+		  System.out.println( "X = " + solutions[i].get("A")); 
+		}
 		
 		Query citizenAttendedAction = new Query("baseKB:attended_action(citizen" + humanCount + ",cooperate(secureCity)).");
 		Query assemblyAttendedAction = new Query("baseKB:attended_action(assembly, decree(group_goal(citizens, secureCity)))"); 

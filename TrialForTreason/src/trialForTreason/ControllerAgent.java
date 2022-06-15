@@ -37,21 +37,21 @@ public class ControllerAgent {
 		ArrayList<String> list = new ArrayList<String>();  
 		Random randy = new Random();
 		for (int i = 0; i < humanCount; i++) {
-			int actionNo = randy.nextInt(humanCount);
-			if (actionNo < humanCount/2) {
-				int salientNo = randy.nextInt(salientEvents.length);
-				list.add(salientEvents[salientNo]);
-			}
-			else {
-				list.add("randEvent"+i);	
-			}
+//			int actionNo = randy.nextInt(humanCount);
+//			if (actionNo < humanCount/2) {
+//				int salientNo = randy.nextInt(salientEvents.length);
+//				list.add(salientEvents[salientNo]);
+//			}
+//			else {
+				list.add("randEvent" + i);	
+//			}
 		}
 		return list;
 	}
     
    @ScheduledMethod(start = 1, interval = 1)
 	public void step() {
-		System.out.println("cascading_events, "+ cascading_events);
+		System.out.println("Random events, "+ cascading_events);
 //		setting_prolog_variables(this.salientEvents, this.prologPath);
 		cascadeAction(this.cascading_events);
 		
@@ -65,7 +65,7 @@ public class ControllerAgent {
 	      while (it.hasNext())
 	      {
 	            Citizen c = it.next();  
-	            c.setCascadeAction(cascading_events.get(cascadeIndex), this.salientEvents);
+	            c.setRandomAction(cascading_events.get(cascadeIndex), this.salientEvents);
 	            cascadeIndex++;
 	      }      
 	}

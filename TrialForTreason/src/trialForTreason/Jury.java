@@ -31,7 +31,8 @@ public class Jury {
 
 	float propability_of_conviction;
 	float propability_of_non_conviction;
-	int salientEventAdopters;
+	String adoptersEvent;
+	ArrayList<String> adoptersEvents = new ArrayList<String>(); 
 	
 	public Jury() {
 		
@@ -51,13 +52,14 @@ public class Jury {
 			log.info("*************************************************************");
 			Double tickcount = RepastEssentials.GetTickCount();
 			int currentTick = tickcount.intValue();
-			System.out.println("I'm a jury member observing " + getCountSalientEventAdopters() + " adopters at tick " + currentTick );		
+			System.out.println("I'm a jury member observing adopters at tick " + (currentTick - 1) + getAdoptersEvent() );			
+			adoptersEvents.clear();
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
 	}
 		
-	public int getCountSalientEventAdopters () {
-		return salientEventAdopters;
+	public ArrayList<String> getAdoptersEvent () {
+		return adoptersEvents;
 	}
 	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {
@@ -67,8 +69,9 @@ public class Jury {
 				System.out.println("Do not convict Leocrates");	
 				}
 			}
-	public void setCountSalientEventAdopters(int count) {
-		this.salientEventAdopters += count;
+	public void setAdoptersEvent(String event) {
+		this.adoptersEvent =  event;
+		this.adoptersEvents.add(event);
 	}
 	
 }

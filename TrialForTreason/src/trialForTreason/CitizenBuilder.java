@@ -43,7 +43,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		float propability_of_non_conviction = (float) 0.1;
 		String prologPath = "src/trialForTreason/cascadings.pl";
 	    String[] salientEvents ={"buildingWalls", "makingPalisades"};
-	    String [] actions  = {"A", "R","A", "A", "A", "A", "A", "A", "A", "A"};
+	    String [] actions  = {"A", "R","R", "R", "A", "A", "A", "A", "A", "A"};
 
 		context.setId("trialForTreason");		
 

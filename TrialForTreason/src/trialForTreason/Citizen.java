@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.jpl7.Atom;
 import org.jpl7.Query;
@@ -52,14 +53,15 @@ public class Citizen {
 	int salientEventAdopters;
 	String cascadingEvent;
 	int Count;
+	int noOfAgents;
 
-
-	public Citizen(String action, String prologPath, String[] events, int humanCount) {
+	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount) {
 		this.action = action;
 		this.prologPath = prologPath;
-		this.events = events;
+		this.salientEvents = salientEvents;
 		this.humanCount = humanCount;
 		this.salientEventAdopters = 0;
+		this.noOfAgents = noOfAgents ;
 	}
 	
 	public Citizen () {
@@ -76,29 +78,29 @@ public class Citizen {
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
-		event = getCascadeAction();
-		salientEvents = getsalientAction();
-		System.out.println("I'm informed by a general to follow  " + event);
-		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.event, this.currentTick, this.humanCount);
-		boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
-		if (result == true && action == "A") {
-			System.out.println(event + " event is salient and I'm adopting" );
-			countSalientEventAdopters(1) ;
-		}
-		else if (result == true && action == "R") {
-			System.out.println(event + " event is salient but I'm rejecting" );
-		}
-		else if (result == false && action == "A") {
-			System.out.println(event + " event is not salient and I'm adopting");	
-		}
-		else {
-			System.out.println(event + " event is not salient and I'm rejecting");
+		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
+		if (action == "A") {
+			System.out.println("I'm adopting an action");
+//			boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
+			java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
+			for ( int i=0 ; i < solutions.length ; i++ ) { 
+				  System.out.println( "X = " + solutions[i].get("A")); 
+				}
+			Random randy = new Random();
+			int actionNo = randy.nextInt(solutions.length);
+			System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
+			passAdoptersEvent(solutions[actionNo].get("A").toString());
+		}else {
+			System.out.println("I'm rejecting an action");
+			event = getRandomAction();
+			System.out.println("I'm choosing an action " + event);
+
 		}
 		log.info("........................................................");
 		}
 	
 		
-	public void countSalientEventAdopters(int count) {
+	public void passAdoptersEvent(String event) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Jury> i = context.getAgentLayer(Jury.class);
 	      Iterator<Jury> it = i.iterator();
@@ -106,7 +108,7 @@ public class Citizen {
 	      while (it.hasNext())
 	      {
 	    	  Jury j = it.next();  
-	          j.setCountSalientEventAdopters(count);
+	          j.setAdoptersEvent(event);
 	          index++;
 	      }      
 	}
@@ -115,12 +117,12 @@ public class Citizen {
 		System.out.println("hello, I am a citizen " + humanCount);
 	}
 	
-	public void setCascadeAction(String cascadingEvent, String [] salientEvents) {
+	public void setRandomAction(String cascadingEvent, String [] salientEvents) {
 		this.cascadingEvent =  cascadingEvent;
-		this.salientEvents = salientEvents;
+//		this.salientEvents = salientEvents;
 	}
 	
-	public String getCascadeAction() {
+	public String getRandomAction() {
 		return cascadingEvent;
 	}
 	
@@ -135,22 +137,7 @@ public class Citizen {
 	
 	public Query []  getPremitiveAction () {
 		return primitiveActionsQueries;
-	}
-	
-	public void countSalientEventRejectors() {
-		Context context = ContextUtils.getContext(this);
-		Iterable<Citizen> i = context.getAgentLayer(Citizen.class);
-	      Iterator<Citizen> it = i.iterator();
-	      int cascadeIndex = 0; 
-	      while (it.hasNext())
-	      {
-	            Citizen c = it.next();  
-//	            c.setCascadeAction(cascading_events.get(cascadeIndex), this.salientEvents);
-	            cascadeIndex++;
-	      }      
-	}
-	
-		
+	}	
 	}
 
 
