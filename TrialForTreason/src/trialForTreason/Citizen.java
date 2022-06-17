@@ -79,7 +79,7 @@ public class Citizen {
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
 		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
-		if (action == "A") {
+		if (currentTick == (humanCount + 1)) {
 			System.out.println("I'm adopting an action");
 //			boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
 			java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
@@ -114,7 +114,7 @@ public class Citizen {
 	}
 	
 	public void handShake(int humanCount) {
-		System.out.println("hello, I am a citizen " + humanCount);
+		System.out.println("hello, I am a citizen " + (humanCount+1));
 	}
 	
 	public void setRandomAction(String cascadingEvent, String [] salientEvents) {

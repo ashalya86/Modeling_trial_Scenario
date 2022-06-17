@@ -71,6 +71,17 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			double signalAccuracy = (double)params.getValue("signal_accuracy");
 			System.out.println("signalAccuracy " + signalAccuracy);
 			System.out.println("citizen_count " + humanCount );
+			System.out.print("salientEvents { ");
+			for (int i = 0; i< salientEvents.length; i++) {
+				System.out.print(salientEvents[i] + " , ");
+			}
+			System.out.println("}");
+			
+			System.out.print("actions { ");
+			for (int i = 0; i< actions.length; i++) {
+				System.out.print(actions[i] + " , ");
+			}
+			System.out.println("}");
 			
 			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));											
 			
@@ -80,7 +91,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			
 			System.out.println("jurors_count " + jurorsCount );
 			for (int i = 0; i < jurorsCount; i++) {
-				context.add(new Jury(propability_of_conviction, propability_of_non_conviction));
+				context.add(new Jury(prologPath, humanCount, salientEvents));
 			}
 //			
 //			

@@ -50,25 +50,19 @@ public class FindingSalientEvent {
 	}
 	
 	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount, String[] salientEvents) throws IOException {
-				this.q1.hasSolution() ;
+		this.q1.hasSolution() ;
+
 		
 		for (int i = 0; i < salientEvents.length; i++) {
-			if (event == salientEvents[i]) {
 				Query query1 = new Query ("add_PFC((counts_as(" + event + ", cooperate(secureCity))))");
 				query1.hasSolution();
 				Query query2 = new Query ("add_PFC((prim_action(citizen"+ humanCount + "," +  event + "))).");
 				query2.hasSolution();
-			}	
 		}
 		
 		Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
 		q4.hasSolution(); 
-		
-		Query queryCountAsEvents = new Query("baseKB:counts_as(A,X).");
-		java.util.Map<String,Term>[] solutions = queryCountAsEvents.allSolutions();
-		for ( int i=0 ; i < solutions.length ; i++ ) { 
-		  System.out.println( "X = " + solutions[i].get("A")); 
-		}
+
 		
 		Query citizenAttendedAction = new Query("baseKB:attended_action(citizen" + humanCount + ",cooperate(secureCity)).");
 		Query assemblyAttendedAction = new Query("baseKB:attended_action(assembly, decree(group_goal(citizens, secureCity)))"); 

@@ -3,6 +3,7 @@
  */
 package trialForTreason;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,14 +34,18 @@ public class Jury {
 	float propability_of_non_conviction;
 	String adoptersEvent;
 	ArrayList<String> adoptersEvents = new ArrayList<String>(); 
+	String prologPath;
+	int humanCount;
+	String[] salientEvents;
+	
+	public Jury(String prologPath, int humanCount, String[] salientEvents) {
+		this.prologPath = prologPath;
+		this.humanCount = humanCount;
+		this.salientEvents = salientEvents;	
+	}
 	
 	public Jury() {
 		
-	}
-
-	public Jury(float propability_of_conviction, float propability_of_non_conviction) {
-		this.propability_of_conviction = propability_of_conviction;
-		this.propability_of_non_conviction = propability_of_non_conviction;
 	}
 	
 	Logger log = Logger.getLogger(
@@ -48,12 +53,21 @@ public class Jury {
 
 
 	@ScheduledMethod(start = 2, interval = 1)
-	public void step() {
+	public void step() throws IOException {
 			log.info("*************************************************************");
 			Double tickcount = RepastEssentials.GetTickCount();
 			int currentTick = tickcount.intValue();
-			System.out.println("I'm a jury member observing adopters at tick " + (currentTick - 1) + getAdoptersEvent() );			
-			adoptersEvents.clear();
+			if (currentTick == humanCount+1) {
+				System.out.println("I'm a jury member observing adopters at tick " + (currentTick - 1) + getAdoptersEvent() );
+				FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, currentTick, this.humanCount, this.salientEvents);
+				for (int i = 0; i < this.adoptersEvents.size(); i++) {
+					boolean result = salientEvent.resultOfSalient(prologPath, adoptersEvents.get(i), currentTick, i, salientEvents);
+					if (result == true) {
+						System.out.println(adoptersEvents.get(i) + " is salient");
+					}
+				}
+			}
+//			adoptersEvents.clear(); 
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
 	}
