@@ -37,6 +37,7 @@ public class Jury {
 	String prologPath;
 	int humanCount;
 	String[] salientEvents;
+	int cascadingCount;
 	
 	public Jury(String prologPath, int humanCount, String[] salientEvents) {
 		this.prologPath = prologPath;
@@ -57,25 +58,20 @@ public class Jury {
 			log.info("*************************************************************");
 			Double tickcount = RepastEssentials.GetTickCount();
 			int currentTick = tickcount.intValue();
-			if (currentTick == humanCount+1) {
-				System.out.println("I'm a jury member observing adopters at tick " + (currentTick - 1) + getAdoptersEvent() );
-				FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, currentTick, this.humanCount, this.salientEvents);
-				for (int i = 0; i < this.adoptersEvents.size(); i++) {
-					boolean result = salientEvent.resultOfSalient(prologPath, adoptersEvents.get(i), currentTick, i, salientEvents);
-					if (result == true) {
-						System.out.println(adoptersEvents.get(i) + " is salient");
-					}
-				}
+			System.out.println("I'm a jury member observing any salient events at tick " + (currentTick - 1));
+			FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, currentTick, this.humanCount, this.salientEvents);
+			boolean resultSalient = salientEvent.resultOfSalient(prologPath, this.adoptersEvent, currentTick, humanCount+1, salientEvents);
+			if (resultSalient == true) {
+				System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);				
 			}
-//			adoptersEvents.clear(); 
+			if (currentTick == humanCount+1) {
+				System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));
+			}
+//			adoptersEvents.clear();
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
 	}
 		
-	public ArrayList<String> getAdoptersEvent () {
-		return adoptersEvents;
-	}
-	
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {
 			if ((propability_of_conviction - propability_of_non_conviction) > 0.5) {
 				System.out.println("Convict Leocrates");
@@ -85,7 +81,8 @@ public class Jury {
 			}
 	public void setAdoptersEvent(String event) {
 		this.adoptersEvent =  event;
-		this.adoptersEvents.add(event);
+//		this.adoptersEvents.add(event);
+		this.cascadingCount ++;
 	}
 	
 }
