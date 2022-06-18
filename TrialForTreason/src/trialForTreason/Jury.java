@@ -62,7 +62,9 @@ public class Jury {
 			FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, currentTick, this.humanCount, this.salientEvents);
 			boolean resultSalient = salientEvent.resultOfSalient(prologPath, this.adoptersEvent, currentTick, humanCount+1, salientEvents);
 			if (resultSalient == true) {
-				System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);				
+				System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
+			}else {
+				System.out.println("There is no salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
 			}
 			if (currentTick == humanCount+1) {
 				System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));

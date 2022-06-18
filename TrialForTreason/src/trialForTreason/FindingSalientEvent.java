@@ -54,10 +54,13 @@ public class FindingSalientEvent {
 
 		
 		for (int i = 0; i < salientEvents.length; i++) {
+				if (event == salientEvents[i]) {
+					System.out.println("event################ " + event);
 				Query query1 = new Query ("add_PFC((counts_as(" + event + ", cooperate(secureCity))))");
 				query1.hasSolution();
 				Query query2 = new Query ("add_PFC((prim_action(citizen"+ humanCount + "," +  event + "))).");
 				query2.hasSolution();
+				}
 		}
 		
 		Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");

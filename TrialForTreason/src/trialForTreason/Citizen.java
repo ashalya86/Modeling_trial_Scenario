@@ -53,7 +53,6 @@ public class Citizen {
 	int salientEventAdopters;
 	String cascadingEvent;
 	int Count;
-	int noOfAgents;
 
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount) {
 		this.action = action;
@@ -61,7 +60,6 @@ public class Citizen {
 		this.salientEvents = salientEvents;
 		this.humanCount = humanCount;
 		this.salientEventAdopters = 0;
-		this.noOfAgents = noOfAgents ;
 	}
 	
 	public Citizen () {
@@ -79,7 +77,7 @@ public class Citizen {
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
 		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
-		if (currentTick == (humanCount + 1)) {
+		if ((currentTick == (humanCount + 1)) && (action == "A") ){
 			System.out.println("I'm adopting an action");
 //			boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
 			java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
@@ -90,11 +88,13 @@ public class Citizen {
 			int actionNo = randy.nextInt(solutions.length);
 			System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
 			passAdoptersEvent(solutions[actionNo].get("A").toString());
-		}else {
+		}else if  ((currentTick == (humanCount + 1)) && (action == "R") ){
 			System.out.println("I'm rejecting an action");
 			event = getRandomAction();
+			passAdoptersEvent(event);
 			System.out.println("I'm choosing an action " + event);
-
+		}else {
+			System.out.println("I'm doing nothing ");
 		}
 		log.info("........................................................");
 		}
