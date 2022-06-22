@@ -64,10 +64,11 @@ public class Jury {
 			if (resultSalient == true) {
 				System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
 			}else {
-				System.out.println("There is no salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
+				System.out.println("There is no salient event at tick " + (currentTick - 1));
 			}
 			if (currentTick == humanCount+1) {
 				System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));
+				System.out.println("I'm a jury member observing cascade of " + adoptersEvents );
 			}
 //			adoptersEvents.clear();
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
@@ -83,7 +84,7 @@ public class Jury {
 			}
 	public void setAdoptersEvent(String event) {
 		this.adoptersEvent =  event;
-//		this.adoptersEvents.add(event);
+		this.adoptersEvents.add(event);
 		this.cascadingCount ++;
 	}
 	

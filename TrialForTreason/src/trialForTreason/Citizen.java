@@ -92,7 +92,7 @@ public class Citizen {
 			System.out.println("I'm rejecting an action");
 			event = getRandomAction();
 			passAdoptersEvent(event);
-			System.out.println("I'm choosing an action " + event);
+			System.out.println("So, I'm choosing an action " + event);
 		}else {
 			System.out.println("I'm doing nothing ");
 		}

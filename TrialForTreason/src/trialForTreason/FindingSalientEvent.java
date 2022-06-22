@@ -50,26 +50,27 @@ public class FindingSalientEvent {
 	}
 	
 	public boolean resultOfSalient(String prologPath, String event, int currentTick, int humanCount, String[] salientEvents) throws IOException {
-		this.q1.hasSolution() ;
-
+	 Query consult = 
+			    new Query( 
+				"consult", 
+				new Term[] {new Atom(prologPath)} 
+			    );
+	 consult.hasSolution() ;
 		
 		for (int i = 0; i < salientEvents.length; i++) {
-				if (event == salientEvents[i]) {
-					System.out.println("event################ " + event);
-				Query query1 = new Query ("add_PFC((counts_as(" + event + ", cooperate(secureCity))))");
-				query1.hasSolution();
-				Query query2 = new Query ("add_PFC((prim_action(citizen"+ humanCount + "," +  event + "))).");
-				query2.hasSolution();
+				if (salientEvents[i].equals(event)) {
+					Query query1 = new Query ("add_PFC((counts_as(" + salientEvents[i] + ", cooperate(secureCity))))");
+					query1.hasSolution();
+					System.out.println(query1.hasSolution());
+					Query query2 = new Query ("add_PFC((prim_action(citizen"+ humanCount + "," +  salientEvents[i] + "))).");
+					query2.hasSolution();
+					Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
+					q4.hasSolution();
+					Query citizenAttendedAction = new Query("baseKB:attended_action(citizen" + humanCount + ",cooperate(secureCity)).");
+					result1 = citizenAttendedAction.hasSolution();
 				}
 		}
-		
-		Query q4 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
-		q4.hasSolution(); 
-
-		
-		Query citizenAttendedAction = new Query("baseKB:attended_action(citizen" + humanCount + ",cooperate(secureCity)).");
 		Query assemblyAttendedAction = new Query("baseKB:attended_action(assembly, decree(group_goal(citizens, secureCity)))"); 
-		result1 = citizenAttendedAction.hasSolution();
 	    result2 = assemblyAttendedAction.hasSolution();
 		return result1;
 	}
