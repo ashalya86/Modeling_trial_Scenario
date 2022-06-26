@@ -6,6 +6,7 @@ package trialForTreason;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import repast.simphony.context.Context;
@@ -34,19 +35,18 @@ public class Jury {
 	float propability_of_non_conviction;
 	String adoptersEvent;
 	ArrayList<String> adoptersEvents = new ArrayList<String>(); 
+	ArrayList<String> publicSquareAttenders = new ArrayList<String>(); 
+
 	String prologPath;
 	int humanCount;
 	String[] salientEvents;
 	int cascadingCount;
+	int noCitizens  = 10;
 	
 	public Jury(String prologPath, int humanCount, String[] salientEvents) {
 		this.prologPath = prologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;	
-	}
-	
-	public Jury() {
-		
 	}
 	
 	Logger log = Logger.getLogger(
@@ -58,21 +58,40 @@ public class Jury {
 			log.info("*************************************************************");
 			Double tickcount = RepastEssentials.GetTickCount();
 			int currentTick = tickcount.intValue();
-			System.out.println("I'm a jury member observing any salient events at tick " + (currentTick - 1));
-			FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, currentTick, this.humanCount, this.salientEvents);
-			boolean resultSalient = salientEvent.resultOfSalient(prologPath, this.adoptersEvent, currentTick, humanCount+1, salientEvents);
-			if (resultSalient == true) {
-				System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
-			}else {
-				System.out.println("There is no salient event at tick " + (currentTick - 1));
+			if (currentTick <= humanCount+1) {
+				observingSalientEvents(this.prologPath, this.adoptersEvent, currentTick, humanCount, salientEvents);
+			} else if  (currentTick > noCitizens) {
+				passingPublicSquare(currentTick);
 			}
-			if (currentTick == humanCount+1) {
-				System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));
-				System.out.println("I'm a jury member observing cascade of " + adoptersEvents );
-			}
+			publicSquareAttenders.clear();
 //			adoptersEvents.clear();
 //			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
 //			log.info("*************************************************************");
+	}
+	
+	public void observingSalientEvents(String prologPath, String adoptersEvent, int currentTick, int humanCount, String [] salientEvents) throws IOException {
+		System.out.println("I'm a jury member observing any salient events at tick " + (currentTick - 1));
+		FindingSalientEvent salientEvent = new FindingSalientEvent(prologPath, currentTick, humanCount, salientEvents);
+		boolean resultSalient = salientEvent.resultOfSalient(prologPath, adoptersEvent, currentTick, humanCount+1, salientEvents);
+		if (resultSalient == true) {
+			System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
+		}else {
+			System.out.println("There is no salient event at tick " + (currentTick - 1));
+		}
+		if (currentTick == humanCount+1) {
+			System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));
+			System.out.println("I'm a jury member observing cascade of " + adoptersEvents );
+		}
+
+	}
+	
+	public void passingPublicSquare(int currentTick) {
+		Random randy = new Random();
+		if (randy.nextInt(2) == 1) {
+			System.out.println("*************************************************************");
+			System.out.println("I'm a jury member passing the public Square at tick " + (currentTick - 1));
+			System.out.println("I'm observing" + publicSquareAttenders);
+		}
 	}
 		
 	public void makedecision(float propability_of_conviction, float propability_of_non_conviction) {
@@ -82,10 +101,15 @@ public class Jury {
 				System.out.println("Do not convict Leocrates");	
 				}
 			}
+	
 	public void setAdoptersEvent(String event) {
 		this.adoptersEvent =  event;
 		this.adoptersEvents.add(event);
 		this.cascadingCount ++;
+	}
+
+	public void setAttendersPublicSquare(int humanCount) {
+		this.publicSquareAttenders.add("Citizen"+ (humanCount + 1));
 	}
 	
 }

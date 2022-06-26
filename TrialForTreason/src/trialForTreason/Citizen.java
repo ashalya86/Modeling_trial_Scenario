@@ -52,18 +52,18 @@ public class Citizen {
 	String[] salientEvents;
 	int salientEventAdopters;
 	String cascadingEvent;
-	int Count;
+	int noCitizens;
 
-	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount) {
+	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens) {
 		this.action = action;
 		this.prologPath = prologPath;
 		this.salientEvents = salientEvents;
 		this.humanCount = humanCount;
 		this.salientEventAdopters = 0;
+		this.noCitizens =  noCitizens;
 	}
 	
-	public Citizen () {
-		
+	public Citizen () {	
 	}
 	
 	Logger log = Logger.getLogger(
@@ -76,30 +76,57 @@ public class Citizen {
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
-		FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
-		if ((currentTick == (humanCount + 1)) && (action == "A") ){
-			System.out.println("I'm adopting an action");
-//			boolean result = salientEvent.resultOfSalient(this.prologPath, this.event, this.currentTick, this.humanCount, this.salientEvents);
-			java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
-			for ( int i=0 ; i < solutions.length ; i++ ) { 
-				  System.out.println( "X = " + solutions[i].get("A")); 
-				}
-			Random randy = new Random();
-			int actionNo = randy.nextInt(solutions.length);
-			System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
-			passAdoptersEvent(solutions[actionNo].get("A").toString());
-		}else if  ((currentTick == (humanCount + 1)) && (action == "R") ){
-			System.out.println("I'm rejecting an action");
-			event = getRandomAction();
-			passAdoptersEvent(event);
-			System.out.println("So, I'm choosing an action " + event);
-		}else {
-			System.out.println("I'm doing nothing ");
+		if (currentTick <= humanCount + 1) {
+			FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
+			if ((currentTick == (humanCount + 1)) && (action == "A") ){
+				System.out.println("I'm adopting an action");
+				java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
+				for ( int i = 0 ; i < solutions.length ; i++ ) { 
+					System.out.println( "X = " + solutions[i].get("A")); 
+					}
+				Random randy = new Random();
+				int actionNo = randy.nextInt(solutions.length);
+				System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
+				passAdoptersEvent(solutions[actionNo].get("A").toString());
+			}else if  ((currentTick == (humanCount + 1)) && (action == "R") ){
+				System.out.println("I'm rejecting an action");
+				event = getRandomAction();
+				passAdoptersEvent(event);
+				System.out.println("So, I'm choosing an action " + event);
+			}else {
+				System.out.println("I'm doing nothing ");
+			}
+		}else if  (currentTick > noCitizens){
+			attendingPublicSquare(this.noCitizens, this.humanCount);
 		}
 		log.info("........................................................");
 		}
 	
-		
+	public void attendingPublicSquare(int noCitizens, int humanCount) {
+		Random randy = new Random();
+		int randNo = randy.nextInt(noCitizens);
+		if (humanCount > randNo) {
+			System.out.println("I'm attending public square");
+			passPublicSquareAttenders(humanCount);
+
+		}else {
+			System.out.println("I'm not attending public square");	
+		}
+	}
+	
+	public void passPublicSquareAttenders(int humanCount) {
+		Context context = ContextUtils.getContext(this);
+		Iterable<Jury> i = context.getAgentLayer(Jury.class);
+	      Iterator<Jury> it = i.iterator();
+	      int index = 0; 
+	      while (it.hasNext())
+	      {
+	    	  Jury j = it.next();  
+	          j.setAttendersPublicSquare(humanCount);
+	          index++;
+	      }      
+	}
+	
 	public void passAdoptersEvent(String event) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Jury> i = context.getAgentLayer(Jury.class);
@@ -119,7 +146,6 @@ public class Citizen {
 	
 	public void setRandomAction(String cascadingEvent, String [] salientEvents) {
 		this.cascadingEvent =  cascadingEvent;
-//		this.salientEvents = salientEvents;
 	}
 	
 	public String getRandomAction() {

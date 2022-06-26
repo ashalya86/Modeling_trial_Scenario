@@ -86,7 +86,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));											
 			
 			for (int i = 0; i < humanCount; i++) {	
-				context.add(new Citizen(actions[i],  prologPath, salientEvents, i));
+				context.add(new Citizen(actions[i],  prologPath, salientEvents, i, humanCount));
 			}	
 			
 			System.out.println("jurors_count " + jurorsCount );

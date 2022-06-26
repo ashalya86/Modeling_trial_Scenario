@@ -51,7 +51,7 @@ public class ControllerAgent {
     
    @ScheduledMethod(start = 1, interval = 1)
 	public void step() {
-		System.out.println("Random events, "+ cascading_events);
+//		System.out.println("Random events, "+ cascading_events);
 //		setting_prolog_variables(this.salientEvents, this.prologPath);
 		cascadeAction(this.cascading_events);
 		
