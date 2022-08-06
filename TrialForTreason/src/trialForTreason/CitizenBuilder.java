@@ -44,6 +44,7 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 		String prologPath = "src/trialForTreason/cascadings.pl";
 	    String[] salientEvents ={"buildingWalls", "makingPalisades"};
 	    String [] actions  = {"A", "R","R", "R", "A", "A", "A", "A", "A", "A"};
+	    Query queryConsult;
 
 		context.setId("trialForTreason");		
 
@@ -83,15 +84,21 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 			}
 			System.out.println("}");
 			
-			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));											
+			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));	
+			
+			queryConsult = 
+				    new Query( 
+					"consult", 
+					new Term[] {new Atom(prologPath)} 
+				    );	
 			
 			for (int i = 0; i < humanCount; i++) {	
-				context.add(new Citizen(actions[i],  prologPath, salientEvents, i, humanCount));
+				context.add(new Citizen(actions[i],  prologPath, salientEvents, i, humanCount, queryConsult));
 			}	
 			
 			System.out.println("jurors_count " + jurorsCount );
 			for (int i = 0; i < jurorsCount; i++) {
-				context.add(new Jury(prologPath, humanCount, salientEvents));
+				context.add(new Jury(prologPath, humanCount, salientEvents, i, queryConsult));
 			}
 //			
 //			

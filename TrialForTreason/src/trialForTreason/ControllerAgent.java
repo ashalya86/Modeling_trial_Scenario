@@ -51,10 +51,7 @@ public class ControllerAgent {
     
    @ScheduledMethod(start = 1, interval = 1)
 	public void step() {
-//		System.out.println("Random events, "+ cascading_events);
-//		setting_prolog_variables(this.salientEvents, this.prologPath);
-		cascadeAction(this.cascading_events);
-		
+		cascadeAction(this.cascading_events);		
 	}
 	  
 	public void cascadeAction(ArrayList<String> cascading_events) {
@@ -70,26 +67,4 @@ public class ControllerAgent {
 	      }      
 	}
 	
-	public Query [] setting_prolog_variables(String [] salientEvents, String prologPath) {
-		primitiveActionsQueries = null;
-		Query q1 = 
-			    new Query( 
-				"consult", 
-				new Term[] {new Atom(prologPath)} 
-			    );
-		System.out.println( "consult " + q1.hasSolution() );
-		
-		Query q3 = new Query ("add_PFC((group_member(citizen"+ humanCount+ ", citizens))).");
-		primitiveActionsQueries[0] = q3;
-		System.out.println(q3.hasSolution());
-		for (int i = 0; i < salientEvents.length; i++) {
-			Query query = new Query ("add_PFC((counts_as(" + salientEvents[i] + ", cooperate(secureCity))))");
-			System.out.println(query.hasSolution());
-			primitiveActionsQueries[i] = query;
-		}
-		 
-		Citizen c = new Citizen ();
-		c.setPremitiveAction(primitiveActionsQueries);
-		return primitiveActionsQueries;
 	}
-}

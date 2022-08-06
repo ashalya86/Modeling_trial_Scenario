@@ -1,4 +1,5 @@
 %salient events and count_as events
+
 :- ensure_loaded(library(pfc_lib)).
 
 :-dynamic group_goal/2.
@@ -37,6 +38,6 @@ prim_action(A, X), counts_as(X, Y) ==> action(A, Y)
 prim_action(assembly, decree(group_goal(citizens, secureCity)))
 )).
 
-%seeing monuments
+
 
 

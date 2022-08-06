@@ -53,17 +53,16 @@ public class Citizen {
 	int salientEventAdopters;
 	String cascadingEvent;
 	int noCitizens;
+	Query queryConsult;
 
-	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens) {
+	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens, Query queryConsult) {
 		this.action = action;
 		this.prologPath = prologPath;
 		this.salientEvents = salientEvents;
 		this.humanCount = humanCount;
 		this.salientEventAdopters = 0;
 		this.noCitizens =  noCitizens;
-	}
-	
-	public Citizen () {	
+		this.queryConsult = queryConsult;
 	}
 	
 	Logger log = Logger.getLogger(
@@ -76,33 +75,36 @@ public class Citizen {
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
-		if (currentTick <= humanCount + 1) {
-			FindingSalientEvent salientEvent = new FindingSalientEvent(this.prologPath, this.currentTick, this.humanCount, this.salientEvents);
-			if ((currentTick == (humanCount + 1)) && (action == "A") ){
-				System.out.println("I'm adopting an action");
-				java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
-				for ( int i = 0 ; i < solutions.length ; i++ ) { 
-					System.out.println( "X = " + solutions[i].get("A")); 
-					}
-				Random randy = new Random();
-				int actionNo = randy.nextInt(solutions.length);
-				System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
-				passAdoptersEvent(solutions[actionNo].get("A").toString());
-			}else if  ((currentTick == (humanCount + 1)) && (action == "R") ){
-				System.out.println("I'm rejecting an action");
-				event = getRandomAction();
-				passAdoptersEvent(event);
-				System.out.println("So, I'm choosing an action " + event);
-			}else {
-				System.out.println("I'm doing nothing ");
-			}
-		}else if  (currentTick > noCitizens){
-			attendingPublicSquare(this.noCitizens, this.humanCount);
+		if (currentTick <= noCitizens) {
+			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
+		}else{
+			scene2(this.noCitizens, this.humanCount);
 		}
 		log.info("........................................................");
 		}
+//	cascading
+	public void scene1(int humanCount, String prologPath, int currentTick, String[] salientEvents, Query queryConsult) {
+		FindingSalientEvent salientEvent = new FindingSalientEvent(prologPath, currentTick, salientEvents, queryConsult);
+		if ((currentTick == (humanCount + 1)) && (action == "A") ){
+			System.out.println("I'm adopting an action");
+			java.util.Map<String,Term>[] solutions = salientEvent.gettingCountAsEvents();
+			for ( int i = 0 ; i < solutions.length ; i++ ) { 
+				System.out.println( "X = " + solutions[i].get("A")); 
+				}
+			Random randy = new Random();
+			int actionNo = randy.nextInt(solutions.length);
+			System.out.println( "I'm choosing " + solutions[actionNo].get("A"));
+			passAdoptersEvent(solutions[actionNo].get("A").toString(), humanCount);
+		}else if  ((currentTick == (humanCount + 1)) && (action == "R") ){
+			System.out.println("I'm rejecting an action");
+			event = getRandomAction();
+			passAdoptersEvent(event, humanCount);
+			System.out.println("So, I'm choosing an action " + event);
+	}
+	}
 	
-	public void attendingPublicSquare(int noCitizens, int humanCount) {
+//	attendingPublicSquare
+	public void scene2(int noCitizens, int humanCount) {
 		Random randy = new Random();
 		int randNo = randy.nextInt(noCitizens);
 		if (humanCount > randNo) {
@@ -127,7 +129,7 @@ public class Citizen {
 	      }      
 	}
 	
-	public void passAdoptersEvent(String event) {
+	public void passAdoptersEvent(String event, int humanCount) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Jury> i = context.getAgentLayer(Jury.class);
 	      Iterator<Jury> it = i.iterator();
@@ -135,7 +137,7 @@ public class Citizen {
 	      while (it.hasNext())
 	      {
 	    	  Jury j = it.next();  
-	          j.setAdoptersEvent(event);
+	          j.setAdoptersEvent(event, humanCount);
 	          index++;
 	      }      
 	}
@@ -155,7 +157,6 @@ public class Citizen {
 	public String[] getsalientAction() {
 		return salientEvents ;
 	}
-	
 	
 	public void setPremitiveAction(Query [] primitiveActionsQueries) {
 		this.primitiveActionsQueries = primitiveActionsQueries;

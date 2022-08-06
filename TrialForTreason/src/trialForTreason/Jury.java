@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import org.jpl7.Query;
+
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -42,11 +44,18 @@ public class Jury {
 	String[] salientEvents;
 	int cascadingCount;
 	int noCitizens  = 10;
+	int jurors_count;
+	Query queryConsult;
 	
-	public Jury(String prologPath, int humanCount, String[] salientEvents) {
+	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
+
+	
+	public Jury(String prologPath, int humanCount, String[] salientEvents, int jurors_count, Query queryConsult) {
 		this.prologPath = prologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;	
+		this.jurors_count = jurors_count; 
+		this.queryConsult = queryConsult;
 	}
 	
 	Logger log = Logger.getLogger(
@@ -58,33 +67,31 @@ public class Jury {
 			log.info("*************************************************************");
 			Double tickcount = RepastEssentials.GetTickCount();
 			int currentTick = tickcount.intValue();
-			if (currentTick <= humanCount+1) {
-				observingSalientEvents(this.prologPath, this.adoptersEvent, currentTick, humanCount, salientEvents);
-			} else if  (currentTick > noCitizens) {
+			if (currentTick < (noCitizens + 1)) {
+				observingSalientEvents(this.prologPath, this.adoptersEvent, currentTick, this.humanCount, this.salientEvents, this.jurors_count);
+			} else{
 				passingPublicSquare(currentTick);
 			}
 			publicSquareAttenders.clear();
-//			adoptersEvents.clear();
-//			makedecision(this.propability_of_conviction, this.propability_of_non_conviction);
-//			log.info("*************************************************************");
 	}
 	
-	public void observingSalientEvents(String prologPath, String adoptersEvent, int currentTick, int humanCount, String [] salientEvents) throws IOException {
+	public void observingSalientEvents(String prologPath, String adoptersEvent, int currentTick, int humanCount, String [] salientEvents, int jurors_count) throws IOException {
 		System.out.println("I'm a jury member observing any salient events at tick " + (currentTick - 1));
-		FindingSalientEvent salientEvent = new FindingSalientEvent(prologPath, currentTick, humanCount, salientEvents);
-		boolean resultSalient = salientEvent.resultOfSalient(prologPath, adoptersEvent, currentTick, humanCount+1, salientEvents);
+		FindingSalientEvent salientEvent = new FindingSalientEvent(prologPath, currentTick, salientEvents, queryConsult);
+		boolean resultSalient = salientEvent.resultOfSalient(prologPath, adoptersEvent, currentTick, humanCount+1, salientEvents, jurors_count);
 		if (resultSalient == true) {
 			System.out.println("There is a salient event at tick " + (currentTick - 1) + " which is " + this.adoptersEvent);
 		}else {
 			System.out.println("There is no salient event at tick " + (currentTick - 1));
 		}
-		if (currentTick == humanCount+1) {
-			System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + (currentTick - 1));
+		if (currentTick == this.noCitizens) {
+			System.out.println("I'm a jury member observing cascade of " +  this.cascadingCount + " agents at tick " + currentTick);
 			System.out.println("I'm a jury member observing cascade of " + adoptersEvents );
 		}
 
 	}
 	
+//	@ScheduledMethod(start = 11, interval = 1)
 	public void passingPublicSquare(int currentTick) {
 		Random randy = new Random();
 		if (randy.nextInt(2) == 1) {
@@ -102,10 +109,11 @@ public class Jury {
 				}
 			}
 	
-	public void setAdoptersEvent(String event) {
+	public void setAdoptersEvent(String event, int humanCount) {
 		this.adoptersEvent =  event;
 		this.adoptersEvents.add(event);
 		this.cascadingCount ++;
+		this.humanCount = humanCount;
 	}
 
 	public void setAttendersPublicSquare(int humanCount) {

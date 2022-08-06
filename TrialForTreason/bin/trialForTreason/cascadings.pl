@@ -1,4 +1,5 @@
-%
+%salient events and count_as events
+
 :- ensure_loaded(library(pfc_lib)).
 
 :-dynamic group_goal/2.
@@ -38,5 +39,5 @@ prim_action(assembly, decree(group_goal(citizens, secureCity)))
 )).
 
 
-:-add_PFC((prim_action(citizen1,rebuildingWalls))).
-:-add_PFC((prim_action(citizen1,rebuildingWalls))).
+
+
