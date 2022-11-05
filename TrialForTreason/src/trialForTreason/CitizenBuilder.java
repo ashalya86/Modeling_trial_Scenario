@@ -1,4 +1,5 @@
 package trialForTreason;
+
 import trialForTreason.Citizen;
 import trialForTreason.Jury;
 import trialForTreason.ControllerAgent;
@@ -35,72 +36,67 @@ import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
 import repast.simphony.util.ContextUtils;
 
-
-public class CitizenBuilder implements ContextBuilder<Object>{
+public class CitizenBuilder implements ContextBuilder<Object> {
 	@Override
 	public Context build(Context<Object> context) {
-		float propability_of_conviction  = (float) 1.0;
-		float propability_of_non_conviction = (float) 0.1;
-		String prologPath = "src/trialForTreason/cascadings.pl";
-	    String[] salientEvents ={"buildingWalls", "makingPalisades"};
-	    String [] actions  = {"A", "R","R", "R", "A", "A", "A", "A", "A", "A"};
-	    Query queryConsult;
+		String cascadingPrologPath = "src/trialForTreason/cascadings.pl";
+		String lewisPrologPath = "src/trialForTreason/lewis_model_ck.pl";
+		String[] salientEvents = { "buildingWalls", "makingPalisades" };
+		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A" };
+		Query queryConsult;
+		HashMap<String, String> perceptsRecieved = new HashMap<String, String>();
+		perceptsRecieved.put("monument", "m27");
+		perceptsRecieved.put("status", "traitor(hipparchus)");
+		perceptsRecieved.put("affordance", "public_information");
 
-		context.setId("trialForTreason");		
+		context.setId("trialForTreason");
 
-		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder
-				.createContinuousSpaceFactory(null);
-		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace(
-				"space", context, new RandomCartesianAdder<Object>(),
-				new repast.simphony.space.continuous.WrapAroundBorders(), 50,
-				50);
+		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
+		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("space", context,
+				new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.WrapAroundBorders(), 50, 50);
 
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
-		Grid<Object> grid = gridFactory.createGrid("grid", context,
-				new GridBuilderParameters<Object>(new WrapAroundBorders(),
-						new SimpleGridAdder<Object>(), true, 50, 50));
-		
-		
-		JurorsDecision jurors = new JurorsDecision ();
+		Grid<Object> grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
+				new WrapAroundBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
+
+		JurorsDecision jurors = new JurorsDecision();
 //		try {
 //			propability = jurors.getResults();
 //	
-			Parameters params = RunEnvironment.getInstance().getParameters();
-			int jurorsCount = (Integer) params.getValue("jurors_count"); 
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		int jurorsCount = (Integer) params.getValue("jurors_count");
+
+		int humanCount = (Integer) params.getValue("human_count");
+		double signalAccuracy = (double) params.getValue("signal_accuracy");
+		System.out.println("signalAccuracy " + signalAccuracy);
+		System.out.println("citizen_count " + humanCount);
+		System.out.print("salientEvents { ");
+		for (int i = 0; i < salientEvents.length; i++) {
+			System.out.print(salientEvents[i] + " , ");
+		}
+		System.out.println("}");
+
+		System.out.print("actions { ");
+		for (int i = 0; i < actions.length; i++) {
+			System.out.print(actions[i] + " , ");
+		}
+		System.out.println("}");
+
+		context.add(new ControllerAgent(humanCount, salientEvents, cascadingPrologPath));
+
+		queryConsult = new Query("consult", new Term[] { new Atom(cascadingPrologPath) });
+
+		for (int i = 0; i < humanCount; i++) {
+			context.add(new Citizen(actions[i], cascadingPrologPath, salientEvents, i, humanCount, queryConsult,
+					lewisPrologPath, perceptsRecieved));
+		}
+
+		System.out.println("jurors_count " + jurorsCount);
+		for (int i = 0; i < jurorsCount; i++) {
+			context.add(new Jury(cascadingPrologPath, humanCount, salientEvents, i, queryConsult, lewisPrologPath,
+					perceptsRecieved));
+		}
 			
-			int humanCount = (Integer) params.getValue("human_count");
-			double signalAccuracy = (double)params.getValue("signal_accuracy");
-			System.out.println("signalAccuracy " + signalAccuracy);
-			System.out.println("citizen_count " + humanCount );
-			System.out.print("salientEvents { ");
-			for (int i = 0; i< salientEvents.length; i++) {
-				System.out.print(salientEvents[i] + " , ");
-			}
-			System.out.println("}");
-			
-			System.out.print("actions { ");
-			for (int i = 0; i< actions.length; i++) {
-				System.out.print(actions[i] + " , ");
-			}
-			System.out.println("}");
-			
-			context.add(new ControllerAgent(humanCount, salientEvents, prologPath));	
-			
-			queryConsult = 
-				    new Query( 
-					"consult", 
-					new Term[] {new Atom(prologPath)} 
-				    );	
-			
-			for (int i = 0; i < humanCount; i++) {	
-				context.add(new Citizen(actions[i],  prologPath, salientEvents, i, humanCount, queryConsult));
-			}	
-			
-			System.out.println("jurors_count " + jurorsCount );
-			for (int i = 0; i < jurorsCount; i++) {
-				context.add(new Jury(prologPath, humanCount, salientEvents, i, queryConsult));
-			}
-//			
 //			
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
@@ -110,16 +106,15 @@ public class CitizenBuilder implements ContextBuilder<Object>{
 //			e.printStackTrace();
 //		}
 
-			WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);		
-			NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>(
-					"social network", context, true); 
-			netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
-			netBuilder.buildNetwork();
-			
+		WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);
+		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
+		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
+		netBuilder.buildNetwork();
+
 		for (Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
 			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
-		}		
+		}
 		return context;
 	}
 }
