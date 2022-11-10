@@ -73,6 +73,7 @@ public class Jury {
 		log.info("*************************************************************");
 		Double tickcount = RepastEssentials.GetTickCount();
 		int currentTick = tickcount.intValue();
+		//System.out.println("%%%%%%%%%%%%%%%%%%%%%%%" + RepastEssentials.GetAdjacent("social network", humanCount));
 		//scene1
 		if (currentTick < (noOfCitizens + 1)) {
 			observingSalientEvents(this.salientPrologPath, this.adoptersEvent, currentTick, this.humanCount,

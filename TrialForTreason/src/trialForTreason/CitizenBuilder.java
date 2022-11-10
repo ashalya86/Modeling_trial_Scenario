@@ -26,6 +26,7 @@ import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -51,16 +52,7 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");
 		perceptsRecieved.put("affordance", "public_information");
-		
-		Random randy = new Random();
-		int dayNo = randy.nextInt(2);
-		
-		if (dayNo == 1) {
-			day = "normal";
-		}else {
-			day = "festival";
-		}
-		
+				
 		context.setId("trialForTreason");
 
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
@@ -72,9 +64,6 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 				new WrapAroundBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
 
 		JurorsDecision jurors = new JurorsDecision();
-//		try {
-//			propability = jurors.getResults();
-//	
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		int jurorsCount = (Integer) params.getValue("jurors_count");
 
@@ -109,15 +98,6 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 					perceptsRecieved, humanCount));
 		}
 			
-//			
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block 
-//			e.printStackTrace();
-//		}
-
 		WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);
 		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);

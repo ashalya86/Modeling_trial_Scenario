@@ -85,25 +85,18 @@ public class Citizen {
 	@ScheduledMethod(start = 1, interval = 1, priority = ScheduleParameters.LAST_PRIORITY)
 	public void step() throws IOException {
 		log.info("........................................................");
-		Double tickcount = RepastEssentials.GetTickCount();
 		Random randy = new Random();
-		int dayNo = randy.nextInt(2);
-		if (dayNo == 1) {
-			day = (String) RepastEssentials.GetParameter("day1");
-		}else {
-			day = (String) RepastEssentials.GetParameter("day2");
-		}
+		Double tickcount = RepastEssentials.GetTickCount();
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
-		System.out.println("################################### " + day);
 		handShake(humanCount);
 		if (currentTick <= noCitizens) {
 			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
 		} else if ((currentTick <= 2*noCitizens) && (currentTick > noCitizens)) {
-			if (this.day == "festival") {
+			if (currentTick % 3 == 0) {
 				scene2FestivalDay(this.humanCount);
 			}else {
-			scene2NormalDay(this.noCitizens, this.humanCount, currentTick);
+				scene2NormalDay(this.noCitizens, this.humanCount, currentTick);
 			}
 		}else {
 			scene3(humanCount, currentTick, this.group);
@@ -142,12 +135,12 @@ public class Citizen {
 	public void scene2NormalDay(int noCitizens, int humanCount, int currentTick) {
 		Random randy = new Random();
 		int randNo = randy.nextInt(noCitizens);
-		if ((humanCount > randNo) && (day == "normal")){
+		if ((humanCount > randNo)){
 			System.out.println("I'm attending public forum");
 			passPublicSquareAttenders(humanCount, "normal");
 		}
 		else {
-			System.out.println("I'm not attending public square");
+			System.out.println("I'm not attending public forum");
 		}
 	}
 	
