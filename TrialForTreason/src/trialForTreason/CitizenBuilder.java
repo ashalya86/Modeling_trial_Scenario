@@ -19,6 +19,7 @@ import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
+import repast.simphony.context.space.graph.NetworkGenerator;
 import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -30,6 +31,7 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.continuous.RandomCartesianAdder;
+import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
@@ -44,11 +46,21 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		String[] salientEvents = { "buildingWalls", "makingPalisades" };
 		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A" };
 		Query queryConsult;
+		String day;
 		HashMap<String, String> perceptsRecieved = new HashMap<String, String>();
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");
 		perceptsRecieved.put("affordance", "public_information");
-
+		
+		Random randy = new Random();
+		int dayNo = randy.nextInt(2);
+		
+		if (dayNo == 1) {
+			day = "normal";
+		}else {
+			day = "festival";
+		}
+		
 		context.setId("trialForTreason");
 
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
@@ -94,7 +106,7 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		System.out.println("jurors_count " + jurorsCount);
 		for (int i = 0; i < jurorsCount; i++) {
 			context.add(new Jury(cascadingPrologPath, humanCount, salientEvents, i, queryConsult, lewisPrologPath,
-					perceptsRecieved));
+					perceptsRecieved, humanCount));
 		}
 			
 //			
@@ -110,7 +122,8 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
 		netBuilder.buildNetwork();
-
+		
+		
 		for (Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
 			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());

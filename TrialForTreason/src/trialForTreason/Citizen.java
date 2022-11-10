@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 import java.util.Iterator;
 
 /**
- * @author nick
+ * @author sriashalya
  *
  */
 public class Citizen {
@@ -55,6 +55,9 @@ public class Citizen {
 	int noCitizens;
 	Query queryConsult;
 	HashMap<String, String> perceptsRecieved;
+	String ethos;
+	String group;
+	String day;
 
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens,
 			Query queryConsult, String lewisPrologPath, HashMap<String, String> perceptsRecieved) {
@@ -67,6 +70,14 @@ public class Citizen {
 		this.queryConsult = queryConsult;
 		this.lewisPrologPath = lewisPrologPath;
 		this.perceptsRecieved = perceptsRecieved;
+		
+		Random randy = new Random();
+		int groupNo = randy.nextInt(2);
+		if (groupNo == 1) {
+			group = "group1";
+		}else {
+			group = "group2";
+		}	
 	}
 
 	Logger log = Logger.getLogger(Citizen.class.getName());
@@ -75,13 +86,27 @@ public class Citizen {
 	public void step() throws IOException {
 		log.info("........................................................");
 		Double tickcount = RepastEssentials.GetTickCount();
+		Random randy = new Random();
+		int dayNo = randy.nextInt(2);
+		if (dayNo == 1) {
+			day = (String) RepastEssentials.GetParameter("day1");
+		}else {
+			day = (String) RepastEssentials.GetParameter("day2");
+		}
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
+		System.out.println("################################### " + day);
 		handShake(humanCount);
 		if (currentTick <= noCitizens) {
 			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
-		} else {
-			scene2(this.noCitizens, this.humanCount);
+		} else if ((currentTick <= 2*noCitizens) && (currentTick > noCitizens)) {
+			if (this.day == "festival") {
+				scene2FestivalDay(this.humanCount);
+			}else {
+			scene2NormalDay(this.noCitizens, this.humanCount, currentTick);
+			}
+		}else {
+			scene3(humanCount, currentTick, this.group);
 		}
 		log.info("........................................................");
 	}
@@ -108,32 +133,47 @@ public class Citizen {
 		}
 	}
 
-//	attendingPublicSquare and getting CK of public monuments
-	public void scene2(int noCitizens, int humanCount) {
+//	attendingPublicSquare 
+	public void scene2FestivalDay(int humanCount) {
+			System.out.println("It is festival!!!!, I'm attending public forum");
+			passPublicSquareAttenders(humanCount, "festival");
+	}
+	
+	public void scene2NormalDay(int noCitizens, int humanCount, int currentTick) {
 		Random randy = new Random();
 		int randNo = randy.nextInt(noCitizens);
-		CKofMonument ck = new CKofMonument(lewisPrologPath,  currentTick, perceptsRecieved, queryConsult);
-		if (humanCount > randNo) {
-			System.out.println("I'm attending public square");
-			passPublicSquareAttenders(humanCount);
-			java.util.Map<String, Term>[] solutions = ck.gettingCK();
-			for (int i = 0; i < solutions.length; i++) {
-				System.out.println("ck = " + solutions[i].get("X"));
-			}
-
-		} else {
+		if ((humanCount > randNo) && (day == "normal")){
+			System.out.println("I'm attending public forum");
+			passPublicSquareAttenders(humanCount, "normal");
+		}
+		else {
 			System.out.println("I'm not attending public square");
 		}
 	}
+	
+	//citizens having ethoses
+	public void scene3(int humanCount, int currentTick, String group) {
+		Random randy = new Random();
+		int randNo = randy.nextInt(noCitizens);
+		if (humanCount > randNo) {
+			ethos = "ethos1";
+		}else if ((humanCount == randNo) ) {
+			ethos = "no ethoses";
+		}else {
+			ethos = "ethos2";
+		}
+		passEthoses(this.group, ethos);
+		System.out.println("I'm citizen " + humanCount + " belongs to "+ group + " having ethos "+ ethos);	
+	}
 
-	public void passPublicSquareAttenders(int humanCount) {
+	public void passPublicSquareAttenders(int humanCount, String day) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Jury> i = context.getAgentLayer(Jury.class);
 		Iterator<Jury> it = i.iterator();
 		int index = 0;
 		while (it.hasNext()) {
 			Jury j = it.next();
-			j.setAttendersPublicSquare(humanCount);
+			j.setAttendersPublicSquare(humanCount, day);
 			index++;
 		}
 	}
@@ -146,6 +186,18 @@ public class Citizen {
 		while (it.hasNext()) {
 			Jury j = it.next();
 			j.setAdoptersEvent(event, humanCount);
+			index++;
+		}
+	}
+	
+	public void passEthoses(String group, String ethos) {
+		Context context = ContextUtils.getContext(this);
+		Iterable<Jury> i = context.getAgentLayer(Jury.class);
+		Iterator<Jury> it = i.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			Jury j = it.next();
+			j.setEthosHolders(group, ethos);
 			index++;
 		}
 	}

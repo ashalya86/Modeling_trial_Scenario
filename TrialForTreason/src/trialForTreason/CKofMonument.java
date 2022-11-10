@@ -20,13 +20,15 @@ public class CKofMonument {
 	int humanCount;
 	Query queryConsult;
 	List<Query> queriesOfPerceptsRecieved = new ArrayList<Query>();
+	HashMap<String, String> perceptsRecieved;
 
 	public CKofMonument(String prologPath, int queryConsultqueryConsult, HashMap<String, String> perceptsRecieved,
 			Query queryConsult) {
 		this.prologPath = prologPath;
 		this.currentTick = currentTick;
 		this.queryConsult = new Query("consult", new Term[] { new Atom(prologPath) });
-		
+		this.perceptsRecieved = perceptsRecieved;
+
 		// feeding what agent percieved in the square
 		this.queriesOfPerceptsRecieved.add(new Query("add_PFC((percept(me, citizen(me))))."));
 
@@ -39,8 +41,19 @@ public class CKofMonument {
 
 		this.queriesOfPerceptsRecieved.add(new Query("add_PFC((percept(me, affordance("
 				+ perceptsRecieved.get("monument") + "," + perceptsRecieved.get("affordance") + "))))."));
+		this.queriesOfPerceptsRecieved.add(
+				new Query("add_PFC((percept(me, citizen(af))))."));
+		this.queriesOfPerceptsRecieved.add(
+				new Query("add_PFC((percept(me, location(af, square))))."));
 	}
 
+	public List<Query> seeingOtherAgents() {
+		this.queriesOfPerceptsRecieved.add(
+				new Query("add_PFC((percept(me, citizen(af))))."));
+		this.queriesOfPerceptsRecieved.add(
+				new Query("add_PFC((percept(me, location(af, square))))."));
+				return queriesOfPerceptsRecieved;
+	}
 
 	public Map<String, Term>[] gettingCK() {
 		this.queryConsult.hasSolution();
@@ -51,5 +64,4 @@ public class CKofMonument {
 		java.util.Map<String, Term>[] solutions = queryCK.allSolutions();
 		return solutions;
 	}
-
 }

@@ -39,8 +39,8 @@ model_suffix(_>>L, L).
 percept(me, citizen(af))
 )).
 :- add_PFC((
- percept(me, location(af, square))
- )).
+percept(me, location(af, square))
+)).
 
 
 % Rules
