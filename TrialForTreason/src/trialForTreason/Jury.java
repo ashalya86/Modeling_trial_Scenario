@@ -46,7 +46,7 @@ public class Jury {
 	int humanCount;
 	String[] salientEvents;
 	int cascadingCount;
-	int jurors_count;
+	int jurorsCount;
 	Query queryConsult;
 	HashMap<String, String> perceptsRecieved;
 	String day;
@@ -54,12 +54,12 @@ public class Jury {
 
 	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
 
-	public Jury(String salientPrologPath, int humanCount, String[] salientEvents, int jurors_count, Query queryConsult,
+	public Jury(String salientPrologPath, int humanCount, String[] salientEvents, int jurorsCount, Query queryConsult,
 			String lewisPrologPath, HashMap<String, String> perceptsRecieved, int noOfCitizens) {
 		this.salientPrologPath = salientPrologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;
-		this.jurors_count = jurors_count;
+		this.jurorsCount = jurorsCount;
 		this.queryConsult = queryConsult;
 		this.lewisPrologPath = lewisPrologPath;
 		this.perceptsRecieved = perceptsRecieved;
@@ -75,13 +75,14 @@ public class Jury {
 		int currentTick = tickcount.intValue();
 		// System.out.println("%%%%%%%%%%%%%%%%%%%%%%%" +
 		// RepastEssentials.GetAdjacent("social network", humanCount));
+		handShake(jurorsCount);
 		// scene1
 		if (currentTick < (noOfCitizens + 1)) {
 			observingSalientEvents(this.salientPrologPath, this.adoptersEvent, currentTick, this.humanCount,
-					this.salientEvents, this.jurors_count);
+					this.salientEvents, this.jurorsCount);
 			// scene2
 		} else if ((currentTick <= 2 * noOfCitizens) && (currentTick > noOfCitizens)) {
-			passingPublicSquare(currentTick, this.day, this.noOfCitizens);
+			passingPublicSquare(currentTick, this.day, this.noOfCitizens, jurorsCount);
 			// scene3
 		} else {
 			gettingAGroup(this.group1, this.group2);
@@ -106,17 +107,17 @@ public class Jury {
 		}
 		if (currentTick == this.noOfCitizens) {
 			System.out.println(
-					"I'm a jury member observing cascade of " + this.cascadingCount + " agents at tick " + currentTick);
+					"I'm a jury member " + (jurors_count + 1) + " observing cascade of " + this.cascadingCount + " agents at tick " + currentTick);
 			System.out.println("I'm a jury member observing cascade of " + adoptersEvents);
 		}
 	}
 
 //	@ScheduledMethod(start = 11, interval = 1) in scene 2
-	public void passingPublicSquare(int currentTick, String day, int noOfCitizens) {
+	public void passingPublicSquare(int currentTick, String day, int noOfCitizens, int jurorsCount) {
 		Random randy = new Random();
 		if (day == "festival") {
 			System.out.println("*************************************************************");
-			System.out.println("I'm a jury member passing the public Square at tick " + (currentTick - 1));
+			System.out.println("I'm a jury member" + (jurorsCount + 1) + "passing the public Square at tick " + (currentTick - 1));
 			System.out.println("I'm observing a festival");
 			if (publicSquareAttenders.size() > (noOfCitizens * 0.85)) {
 				System.out
@@ -129,24 +130,29 @@ public class Jury {
 					System.out.println(
 							"Jury realises " + solutions[i].get("X") + "is common knowledege among the citizens");
 				}
+			}else {
+				System.out.println("I don't perceive certain threshhold of citizens in the festival. It is only "
+						+ (publicSquareAttenders.size() * 100) / noOfCitizens + "% " + publicSquareAttenders);
 			}
-
-		} else {
-			System.out.println("I don't perceive certain threshhold of citizens in the festival. It is only "
-					+ (publicSquareAttenders.size() * 100) / noOfCitizens + "% " + publicSquareAttenders);
-		}
-		if (randy.nextInt(2) == 1 && day == "normal") {
+		} 
+		if (day == "normal") {
 			System.out.println("*************************************************************");
-			System.out.println("I'm a jury member passing the public Square at tick " + (currentTick - 1));
-			System.out.println("I'm observing" + publicSquareAttenders);
-			if (publicSquareAttenders.size() > 0) {
-				CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
-						queryConsult);
-				java.util.Map<String, Term>[] solutions = ck.gettingCK();
-				for (int i = 0; i < solutions.length; i++) {
-					System.out.println(
-							"Jury realises " + solutions[i].get("X") + "is common knowledege among these citizens");
+			if (randy.nextInt(2*jurorsCount) < (jurorsCount + 1)) {
+				System.out.println(
+						"I'm a jury member " + (jurorsCount + 1) + " passing the public Square at tick " + (currentTick - 1));
+				System.out.println("I'm observing" + publicSquareAttenders);
+				if (publicSquareAttenders.size() > 0) {
+					CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
+							queryConsult);
+					java.util.Map<String, Term>[] solutions = ck.gettingCK();
+					for (int i = 0; i < solutions.length; i++) {
+						System.out.println(
+								"Jury realises " + solutions[i].get("X") + "is common knowledege among these citizens");
+					}
 				}
+			}else {
+				System.out.println(
+						"I'm not attending the sqaure today ");
 			}
 		}
 	}
@@ -201,5 +207,9 @@ public class Jury {
 		} else {
 			this.group2.add(ethos);
 		}
+	}
+
+	public void handShake(int juryCount) {
+		System.out.println("hello, I am a jury member " + (juryCount + 1));
 	}
 }

@@ -13,7 +13,7 @@
 									
 		/>
 				<parameter name="jurors_count" displayName="Jurors Count" type="int" 
-						defaultValue="1" 
+						defaultValue="2" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -22,19 +22,6 @@
 						defaultValue="1" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="day1" displayName="day1" type="java.lang.String" 
-						defaultValue="normal" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
-									
-		/>
-		
-				<parameter name="day2" displayName="day2" type="java.lang.String" 
-						defaultValue="festival" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
 									
 		/>
 				<parameter name="signal_accuracy" displayName="Signal Accuracy" type="double" 
