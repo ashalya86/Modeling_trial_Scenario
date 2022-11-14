@@ -103,7 +103,6 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
 		netBuilder.buildNetwork();
 		
-		
 		for (Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
 			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());

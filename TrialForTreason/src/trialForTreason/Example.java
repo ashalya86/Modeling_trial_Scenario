@@ -81,6 +81,8 @@ public class Example {
 		group1.add("ethos2");
 
 		System.out.println("I'm attending public square");
+		double probEthos2 = (2.0/(2.0 + 4.0));
+		 System.out.println("Jury member realises proportion of  ethos1 is " + probEthos2);
 //		java.util.Map<String, Term>[] solutions = ex.gettingCountAsEvents();
 //		for (int i = 0; i < solutions.length; i++) {
 //			System.out.println("X = " + solutions[i].get("X"));

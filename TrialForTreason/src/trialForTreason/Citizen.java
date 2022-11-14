@@ -58,6 +58,7 @@ public class Citizen {
 	String ethos;
 	String group;
 	String day;
+	Random randy;
 
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens,
 			Query queryConsult, String lewisPrologPath, HashMap<String, String> perceptsRecieved) {
@@ -71,7 +72,7 @@ public class Citizen {
 		this.lewisPrologPath = lewisPrologPath;
 		this.perceptsRecieved = perceptsRecieved;
 		
-		Random randy = new Random();
+		this.randy = new Random();
 		int groupNo = randy.nextInt(2);
 		if (groupNo == 1) {
 			group = "group1";
@@ -94,7 +95,7 @@ public class Citizen {
 			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
 		} else if ((currentTick <= 2*noCitizens) && (currentTick > noCitizens)) {
 			if (currentTick % 3 == 0) {
-				scene2FestivalDay(this.humanCount);
+				scene2FestivalDay(this.humanCount, this.noCitizens);
 			}else {
 				scene2NormalDay(this.noCitizens, this.humanCount, currentTick);
 			}
@@ -127,9 +128,12 @@ public class Citizen {
 	}
 
 //	attendingPublicSquare 
-	public void scene2FestivalDay(int humanCount) {
-			System.out.println("It is festival!!!!, I'm attending public forum");
-			passPublicSquareAttenders(humanCount, "festival");
+	public void scene2FestivalDay(int humanCount, int noOfCitizens) {
+			int randNo = this.randy.nextInt(noOfCitizens);
+			if (randNo < (noOfCitizens*0.95)) {
+				System.out.println("It is festival!!!!, I'm attending public forum");
+				passPublicSquareAttenders(humanCount, "festival");	
+			}
 	}
 	
 	public void scene2NormalDay(int noCitizens, int humanCount, int currentTick) {

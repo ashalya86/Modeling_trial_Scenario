@@ -73,16 +73,17 @@ public class Jury {
 		log.info("*************************************************************");
 		Double tickcount = RepastEssentials.GetTickCount();
 		int currentTick = tickcount.intValue();
-		//System.out.println("%%%%%%%%%%%%%%%%%%%%%%%" + RepastEssentials.GetAdjacent("social network", humanCount));
-		//scene1
+		// System.out.println("%%%%%%%%%%%%%%%%%%%%%%%" +
+		// RepastEssentials.GetAdjacent("social network", humanCount));
+		// scene1
 		if (currentTick < (noOfCitizens + 1)) {
 			observingSalientEvents(this.salientPrologPath, this.adoptersEvent, currentTick, this.humanCount,
 					this.salientEvents, this.jurors_count);
-		//scene2
-		} else if ((currentTick <= 2*noOfCitizens) && (currentTick > noOfCitizens)) {
-			passingPublicSquare(currentTick, this.day);
-		//scene3
-		}else {
+			// scene2
+		} else if ((currentTick <= 2 * noOfCitizens) && (currentTick > noOfCitizens)) {
+			passingPublicSquare(currentTick, this.day, this.noOfCitizens);
+			// scene3
+		} else {
 			gettingAGroup(this.group1, this.group2);
 		}
 		publicSquareAttenders.clear();
@@ -111,19 +112,28 @@ public class Jury {
 	}
 
 //	@ScheduledMethod(start = 11, interval = 1) in scene 2
-	public void passingPublicSquare(int currentTick, String day) {
+	public void passingPublicSquare(int currentTick, String day, int noOfCitizens) {
 		Random randy = new Random();
 		if (day == "festival") {
 			System.out.println("*************************************************************");
 			System.out.println("I'm a jury member passing the public Square at tick " + (currentTick - 1));
-			System.out.println("I'm observing a festival and everyone attends" + publicSquareAttenders);
-			CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
-					queryConsult);
-			java.util.Map<String, Term>[] solutions = ck.gettingCK();
-			for (int i = 0; i < solutions.length; i++) {
-				System.out.println(
-						"Jury realises " + solutions[i].get("X") + "is common knowledege among the citizens");
-			}	
+			System.out.println("I'm observing a festival");
+			if (publicSquareAttenders.size() > (noOfCitizens * 0.85)) {
+				System.out
+						.println("I perceive certain threshhold " + (publicSquareAttenders.size() * 100) / noOfCitizens
+								+ "% of citizens in the festival" + publicSquareAttenders);
+				CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
+						queryConsult);
+				java.util.Map<String, Term>[] solutions = ck.gettingCK();
+				for (int i = 0; i < solutions.length; i++) {
+					System.out.println(
+							"Jury realises " + solutions[i].get("X") + "is common knowledege among the citizens");
+				}
+			}
+
+		} else {
+			System.out.println("I don't perceive certain threshhold of citizens in the festival. It is only "
+					+ (publicSquareAttenders.size() * 100) / noOfCitizens + "% " + publicSquareAttenders);
 		}
 		if (randy.nextInt(2) == 1 && day == "normal") {
 			System.out.println("*************************************************************");
@@ -135,14 +145,15 @@ public class Jury {
 				java.util.Map<String, Term>[] solutions = ck.gettingCK();
 				for (int i = 0; i < solutions.length; i++) {
 					System.out.println(
-							"Jury realises " + solutions[i].get("X") + "is common knowledege among the citizens");
+							"Jury realises " + solutions[i].get("X") + "is common knowledege among these citizens");
 				}
 			}
-		}}
-	
+		}
+	}
+
 	public void gettingAGroup(ArrayList<String> group1, ArrayList<String> group2) {
-		int countEthos1;
-		int countEthos2;
+		double countEthos1;
+		double countEthos2;
 		ArrayList<String> connectedGr;
 		System.out.println("group1 has " + group1);
 		System.out.println("group2 has " + group2);
@@ -153,17 +164,23 @@ public class Jury {
 			connectedGr = group1;
 			countEthos1 = Collections.frequency(group1, "ethos1");
 			countEthos2 = Collections.frequency(group1, "ethos2");
- 		}else {
- 			connectedGr = group2;
+		} else {
+			connectedGr = group2;
 			System.out.println("Jury connected with group2 " + group2);
- 			countEthos1 = Collections.frequency(group2, "ethos1");
- 			countEthos2 = Collections.frequency(group2, "ethos2"); 			
- 		}
-		if (countEthos1 > countEthos2 && countEthos1 > connectedGr.size()/2) {
-			System.out.println("Jury member realises his group connected with ethos1");
-		}else if (countEthos2 > countEthos1 && countEthos2 > connectedGr.size()/2) {
-			System.out.println("Jury member realises his group connected with ethos2 ");	
+			countEthos1 = Collections.frequency(group2, "ethos1");
+			countEthos2 = Collections.frequency(group2, "ethos2");
 		}
+		if (group1.size() > 0 && group2.size() > 0) {
+			double probEthos1 = (countEthos1 / (countEthos1 + countEthos2));
+			double probEthos2 = (countEthos2 / (countEthos1 + countEthos2));
+			System.out.println("Jury member realises proportion of  ethos1 is " + probEthos1);
+			System.out.println("Jury member realises proportion of  ethos2 is " + probEthos2);
+		}
+//		if (countEthos1 > countEthos2 && countEthos1 > connectedGr.size()/2) {
+//			System.out.println("Jury member realises his group connected with ethos1");
+//		}else if (countEthos2 > countEthos1 && countEthos2 > connectedGr.size()/2) {
+//			System.out.println("Jury member realises his group connected with ethos2 ");	
+//		}
 	}
 
 	public void setAdoptersEvent(String event, int humanCount) {
@@ -177,12 +194,12 @@ public class Jury {
 		this.publicSquareAttenders.add("Citizen" + (humanCount + 1));
 		this.day = day;
 	}
-	
+
 	public void setEthosHolders(String group, String ethos) {
 		if (group == "group1") {
 			this.group1.add(ethos);
-		}else {
+		} else {
 			this.group2.add(ethos);
-		}		
+		}
 	}
 }
