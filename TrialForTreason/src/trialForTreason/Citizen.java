@@ -17,19 +17,11 @@ import org.jpl7.Term;
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.engine.watcher.Watch;
-import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.essentials.RepastEssentials;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
-import repast.simphony.random.RandomHelper;
-import repast.simphony.space.SpatialMath;
 import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.continuous.NdPoint;
+import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 import repast.simphony.util.ContextUtils;
-import repast.simphony.util.SimUtilities;
 import java.util.logging.Logger;
 import java.util.Iterator;
 
@@ -38,7 +30,9 @@ import java.util.Iterator;
  *
  */
 public class Citizen {
-
+	
+	private Grid<Object> grid;
+	private ContinuousSpace<Object> space;
 	String event;
 	String[] events;
 	String prologPath;
@@ -56,12 +50,18 @@ public class Citizen {
 	Query queryConsult;
 	HashMap<String, String> perceptsRecieved;
 	String ethos;
-	String group;
 	String day;
 	Random randy;
+	String name;
+	Citizen citizen;
+	private static List<Citizen> citizens= new ArrayList<Citizen>();
+	HashMap<Integer, ArrayList<Integer>> edgeDetail;
+	String graphPath = "./data/10agent.graph";
 
+	
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens,
-			Query queryConsult, String lewisPrologPath, HashMap<String, String> perceptsRecieved) {
+			Query queryConsult, String lewisPrologPath, HashMap<String, String> perceptsRecieved,
+		 Grid<Object> grid, ContinuousSpace<Object> space) {
 		this.action = action;
 		this.prologPath = prologPath;
 		this.salientEvents = salientEvents;
@@ -71,16 +71,16 @@ public class Citizen {
 		this.queryConsult = queryConsult;
 		this.lewisPrologPath = lewisPrologPath;
 		this.perceptsRecieved = perceptsRecieved;
-		
-		this.randy = new Random();
-		int groupNo = randy.nextInt(2);
-		if (groupNo == 1) {
-			group = "group1";
-		}else {
-			group = "group2";
-		}	
+		this.grid = grid;
+		this.space = space;
+		this.randy = new Random();	
 	}
-
+	
+	public Citizen(ContinuousSpace<Object> space, Grid<Object> grid) {
+		this.space = space;
+		this.grid = grid;
+	}
+	
 	Logger log = Logger.getLogger(Citizen.class.getName());
 
 	@ScheduledMethod(start = 1, interval = 1, priority = ScheduleParameters.LAST_PRIORITY)
@@ -91,21 +91,48 @@ public class Citizen {
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
+		if (currentTick == 1) {
+			citizen = new Citizen(this.space, this.grid);
+			addCitizens(citizen);
+		}
 		if (currentTick <= noCitizens) {
 			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
-		} else if ((currentTick <= 2*noCitizens) && (currentTick > noCitizens)) {
+		} else if ((currentTick <= 2 * noCitizens) && (currentTick > noCitizens)) {
 			if (currentTick % 3 == 0) {
 				scene2FestivalDay(this.humanCount, this.noCitizens);
-			}else {
+			} else {
 				scene2NormalDay(this.noCitizens, this.humanCount, currentTick);
 			}
-		}else {
-			scene3(humanCount, currentTick, this.group);
+		} else {
+			propSocialNetwork prop = new propSocialNetwork(this.noCitizens, this.graphPath);
+			this.edgeDetail = prop.setEdges(this.graphPath, this.noCitizens);
+			prop.getEdges(this.edgeDetail);
+			createNetwork(this.citizens, this.edgeDetail);
+			System.out.println("createNetwork ...... successfull ");
 		}
 		log.info("........................................................");
 	}
+	
+	private void handShake(int humanCount) {
+		System.out.println("hello, I am a citizen " + (humanCount + 1));
+		this.name = "citizen " + (humanCount + 1);
+	}
 
-//	cascading
+	public void addCitizens(Citizen citizen) {
+		this.citizens.add(citizen);
+	}
+		
+	private void createNetwork(List<Citizen> citizens, HashMap<Integer, ArrayList<Integer>> edgeDetail) {
+		Context<Object> context= ContextUtils.getContext(this);		
+		Network<Object> colNet =(Network<Object>)context.getProjection("social network");
+		colNet.addEdge(citizens.get(0), citizens.get(9));
+		colNet.addEdge(citizens.get(0), citizens.get(1));
+		colNet.addEdge(citizens.get(0), citizens.get(3));
+		colNet.addEdge(citizens.get(0), citizens.get(4));
+		colNet.addEdge(citizens.get(0), citizens.get(8));
+		}
+	
+	// cascading
 	public void scene1(int humanCount, String prologPath, int currentTick, String[] salientEvents, Query queryConsult) {
 		FindingSalientEvent salientEvent = new FindingSalientEvent(prologPath, currentTick, salientEvents,
 				queryConsult);
@@ -129,38 +156,22 @@ public class Citizen {
 
 //	attendingPublicSquare 
 	public void scene2FestivalDay(int humanCount, int noOfCitizens) {
-			int randNo = this.randy.nextInt(noOfCitizens);
-			if (randNo < (noOfCitizens*0.95)) {
-				System.out.println("It is festival!!!!, I'm attending public forum");
-				passPublicSquareAttenders(humanCount, "festival");	
-			}
+		int randNo = this.randy.nextInt(noOfCitizens);
+		if (randNo < (noOfCitizens * 0.95)) {
+			System.out.println("It is festival!!!!, I'm attending public forum");
+			passPublicSquareAttenders(humanCount, "festival");
+		}
 	}
-	
+
 	public void scene2NormalDay(int noCitizens, int humanCount, int currentTick) {
 		Random randy = new Random();
 		int randNo = randy.nextInt(noCitizens);
-		if ((humanCount > randNo)){
+		if ((humanCount > randNo)) {
 			System.out.println("I'm attending public forum");
 			passPublicSquareAttenders(humanCount, "normal");
-		}
-		else {
+		} else {
 			System.out.println("I'm not attending public forum");
 		}
-	}
-	
-	//citizens having ethoses
-	public void scene3(int humanCount, int currentTick, String group) {
-		Random randy = new Random();
-		int randNo = randy.nextInt(noCitizens);
-		if (humanCount > randNo) {
-			ethos = "ethos1";
-		}else if ((humanCount == randNo) ) {
-			ethos = "no ethoses";
-		}else {
-			ethos = "ethos2";
-		}
-		passEthoses(this.group, ethos);
-		System.out.println("I'm citizen " + humanCount + " belongs to "+ group + " having ethos "+ ethos);	
 	}
 
 	public void passPublicSquareAttenders(int humanCount, String day) {
@@ -186,25 +197,25 @@ public class Citizen {
 			index++;
 		}
 	}
-	
-	public void passEthoses(String group, String ethos) {
+
+	public void passCitizens(String citizen) {
 		Context context = ContextUtils.getContext(this);
 		Iterable<Jury> i = context.getAgentLayer(Jury.class);
 		Iterator<Jury> it = i.iterator();
 		int index = 0;
 		while (it.hasNext()) {
 			Jury j = it.next();
-			j.setEthosHolders(group, ethos);
+			j.setCitizens(citizen);;
 			index++;
 		}
 	}
 
-	public void handShake(int humanCount) {
-		System.out.println("hello, I am a citizen " + (humanCount + 1));
-	}
-
 	public void setRandomAction(String cascadingEvent, String[] salientEvents) {
 		this.cascadingEvent = cascadingEvent;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getRandomAction() {

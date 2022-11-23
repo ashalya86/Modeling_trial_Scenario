@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.jpl7.Query;
 import org.jpl7.Term;
 
+import bsh.This;
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -38,8 +39,7 @@ public class Jury {
 	String adoptersEvent;
 	ArrayList<String> adoptersEvents = new ArrayList<String>();
 	ArrayList<String> publicSquareAttenders = new ArrayList<String>();
-	ArrayList<String> group1 = new ArrayList<String>();
-	ArrayList<String> group2 = new ArrayList<String>();
+	ArrayList<String> citizens = new ArrayList<String>();
 
 	String salientPrologPath;
 	String lewisPrologPath;
@@ -51,11 +51,14 @@ public class Jury {
 	HashMap<String, String> perceptsRecieved;
 	String day;
 	int noOfCitizens;
+	private Grid<Object> grid;
+	private ContinuousSpace<Object> space;
 
 	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
 
 	public Jury(String salientPrologPath, int humanCount, String[] salientEvents, int jurorsCount, Query queryConsult,
-			String lewisPrologPath, HashMap<String, String> perceptsRecieved, int noOfCitizens) {
+			String lewisPrologPath, HashMap<String, String> perceptsRecieved, int noOfCitizens, Grid<Object> grid,
+	ContinuousSpace<Object> space) {
 		this.salientPrologPath = salientPrologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;
@@ -64,6 +67,14 @@ public class Jury {
 		this.lewisPrologPath = lewisPrologPath;
 		this.perceptsRecieved = perceptsRecieved;
 		this.noOfCitizens = noOfCitizens;
+		this.grid = grid;
+		this.space = space;
+
+	}
+
+	public Jury(ContinuousSpace<Object> space, Grid<Object> grid) {
+		this.space = space;
+		this.grid = grid;
 	}
 
 	Logger log = Logger.getLogger(Citizen.class.getName());
@@ -72,9 +83,7 @@ public class Jury {
 	public void step() throws IOException {
 		log.info("*************************************************************");
 		Double tickcount = RepastEssentials.GetTickCount();
-		int currentTick = tickcount.intValue();
-		// System.out.println("%%%%%%%%%%%%%%%%%%%%%%%" +
-		// RepastEssentials.GetAdjacent("social network", humanCount));
+		int currentTick = tickcount.intValue(); 
 		handShake(jurorsCount);
 		// scene1
 		if (currentTick < (noOfCitizens + 1)) {
@@ -85,12 +94,15 @@ public class Jury {
 			passingPublicSquare(currentTick, this.day, this.noOfCitizens, jurorsCount);
 			// scene3
 		} else {
-			gettingAGroup(this.group1, this.group2);
+			//createNetwork(citizens);
 		}
 		publicSquareAttenders.clear();
-		group1.clear();
-		group2.clear();
 	}
+	
+	private void createNetwork(ArrayList<String> citizens) {
+	}
+
+
 
 	public void observingSalientEvents(String salientPrologPath, String adoptersEvent, int currentTick, int humanCount,
 			String[] salientEvents, int jurors_count) throws IOException {
@@ -106,18 +118,18 @@ public class Jury {
 			System.out.println("There is no salient event at tick " + (currentTick - 1));
 		}
 		if (currentTick == this.noOfCitizens) {
-			System.out.println(
-					"I'm a jury member " + (jurors_count + 1) + " observing cascade of " + this.cascadingCount + " agents at tick " + currentTick);
+			System.out.println("I'm a jury member " + (jurors_count + 1) + " observing cascade of "
+					+ this.cascadingCount + " agents at tick " + currentTick);
 			System.out.println("I'm a jury member observing cascade of " + adoptersEvents);
 		}
 	}
 
-//	@ScheduledMethod(start = 11, interval = 1) in scene 2
 	public void passingPublicSquare(int currentTick, String day, int noOfCitizens, int jurorsCount) {
 		Random randy = new Random();
 		if (day == "festival") {
 			System.out.println("*************************************************************");
-			System.out.println("I'm a jury member" + (jurorsCount + 1) + "passing the public Square at tick " + (currentTick - 1));
+			System.out.println(
+					"I'm a jury member" + (jurorsCount + 1) + "passing the public Square at tick " + (currentTick - 1));
 			System.out.println("I'm observing a festival");
 			if (publicSquareAttenders.size() > (noOfCitizens * 0.85)) {
 				System.out
@@ -130,63 +142,30 @@ public class Jury {
 					System.out.println(
 							"Jury realises " + solutions[i].get("X") + "is common knowledege among the citizens");
 				}
-			}else {
+			} else {
 				System.out.println("I don't perceive certain threshhold of citizens in the festival. It is only "
 						+ (publicSquareAttenders.size() * 100) / noOfCitizens + "% " + publicSquareAttenders);
 			}
-		} 
+		}
 		if (day == "normal") {
 			System.out.println("*************************************************************");
-			if (randy.nextInt(2*jurorsCount) < (jurorsCount + 1)) {
-				System.out.println(
-						"I'm a jury member " + (jurorsCount + 1) + " passing the public Square at tick " + (currentTick - 1));
+			if (randy.nextInt(3) < (jurorsCount + 1)) {
+				System.out.println("I'm a jury member " + (jurorsCount + 1) + " passing the public Square at tick "
+						+ (currentTick - 1));
 				System.out.println("I'm observing" + publicSquareAttenders);
 				if (publicSquareAttenders.size() > 0) {
 					CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
 							queryConsult);
 					java.util.Map<String, Term>[] solutions = ck.gettingCK();
 					for (int i = 0; i < solutions.length; i++) {
-						System.out.println(
-								"Jury realises " + solutions[i].get("X") + "is common knowledege among these citizens");
+						System.out.println("Jury " + (jurorsCount + 1) + " realises " + solutions[i].get("X")
+								+ "is common knowledege among these citizens");
 					}
 				}
-			}else {
-				System.out.println(
-						"I'm not attending the sqaure today ");
+			} else {
+				System.out.println("I'm not attending the sqaure today ");
 			}
 		}
-	}
-
-	public void gettingAGroup(ArrayList<String> group1, ArrayList<String> group2) {
-		double countEthos1;
-		double countEthos2;
-		ArrayList<String> connectedGr;
-		System.out.println("group1 has " + group1);
-		System.out.println("group2 has " + group2);
-		Random randy = new Random();
-		int randNo = randy.nextInt(2);
-		if (randNo == 1) {
-			System.out.println("Jury connected with group1 " + group1);
-			connectedGr = group1;
-			countEthos1 = Collections.frequency(group1, "ethos1");
-			countEthos2 = Collections.frequency(group1, "ethos2");
-		} else {
-			connectedGr = group2;
-			System.out.println("Jury connected with group2 " + group2);
-			countEthos1 = Collections.frequency(group2, "ethos1");
-			countEthos2 = Collections.frequency(group2, "ethos2");
-		}
-		if (group1.size() > 0 && group2.size() > 0) {
-			double probEthos1 = (countEthos1 / (countEthos1 + countEthos2));
-			double probEthos2 = (countEthos2 / (countEthos1 + countEthos2));
-			System.out.println("Jury member realises proportion of  ethos1 is " + probEthos1);
-			System.out.println("Jury member realises proportion of  ethos2 is " + probEthos2);
-		}
-//		if (countEthos1 > countEthos2 && countEthos1 > connectedGr.size()/2) {
-//			System.out.println("Jury member realises his group connected with ethos1");
-//		}else if (countEthos2 > countEthos1 && countEthos2 > connectedGr.size()/2) {
-//			System.out.println("Jury member realises his group connected with ethos2 ");	
-//		}
 	}
 
 	public void setAdoptersEvent(String event, int humanCount) {
@@ -201,14 +180,9 @@ public class Jury {
 		this.day = day;
 	}
 
-	public void setEthosHolders(String group, String ethos) {
-		if (group == "group1") {
-			this.group1.add(ethos);
-		} else {
-			this.group2.add(ethos);
-		}
+	public void setCitizens(String citizen) {
+		this.citizens.add(citizen);
 	}
-
 	public void handShake(int juryCount) {
 		System.out.println("hello, I am a jury member " + (juryCount + 1));
 	}

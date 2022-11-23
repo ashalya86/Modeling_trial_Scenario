@@ -4,11 +4,15 @@ import trialForTreason.Citizen;
 import trialForTreason.Jury;
 import trialForTreason.ControllerAgent;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jpl7.Atom;
 import org.jpl7.JPL;
 import org.jpl7.Query;
@@ -19,7 +23,9 @@ import repast.simphony.context.DefaultContext;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
+import repast.simphony.context.space.graph.NetworkFileFormat;
 import repast.simphony.context.space.graph.NetworkGenerator;
+import repast.simphony.context.space.graph.NodeCreator;
 import repast.simphony.context.space.graph.WattsBetaSmallWorldGenerator;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -32,6 +38,7 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.continuous.RandomCartesianAdder;
+import repast.simphony.space.graph.EdgeCreator;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -63,7 +70,6 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		Grid<Object> grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
 				new WrapAroundBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
 
-		JurorsDecision jurors = new JurorsDecision();
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		int jurorsCount = (Integer) params.getValue("jurors_count");
 
@@ -87,21 +93,41 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 
 		queryConsult = new Query("consult", new Term[] { new Atom(cascadingPrologPath) });
 
+		//Create humans
 		for (int i = 0; i < humanCount; i++) {
 			context.add(new Citizen(actions[i], cascadingPrologPath, salientEvents, i, humanCount, queryConsult,
-					lewisPrologPath, perceptsRecieved));
+					lewisPrologPath, perceptsRecieved, grid, space));
 		}
 
+		//Create jurors
 		System.out.println("jurors_count " + jurorsCount);
 		for (int i = 0; i < jurorsCount; i++) {
 			context.add(new Jury(cascadingPrologPath, humanCount, salientEvents, i, queryConsult, lewisPrologPath,
-					perceptsRecieved, humanCount));
+					perceptsRecieved, humanCount, grid, space));
 		}
-			
+		
+//		NodeCreator nodeCreator = null;
+//		NetworkBuilder builder = new NetworkBuilder("Network", context, true);
+//		try {
+//			OPCPackage pkg = OPCPackage.open(new File("./data/sample.xlsx"));
+//			XSSFWorkbook wb = new XSSFWorkbook(pkg);
+//			builder.load("./data/sample.xlsx",
+//			NetworkFileFormat.EXCEL, nodeCreator);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (InvalidFormatException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Network net = builder.buildNetwork();
+		
+
 		WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);
 		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
 		netBuilder.buildNetwork();
+		Network<Object> colNet = (Network<Object>) context.getProjection("social network");	
 		
 		for (Object obj : context) {
 			NdPoint pt = space.getLocation(obj);
