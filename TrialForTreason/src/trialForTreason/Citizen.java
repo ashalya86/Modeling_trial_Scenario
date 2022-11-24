@@ -18,9 +18,12 @@ import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.essentials.RepastEssentials;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.space.grid.GridPoint;
 import repast.simphony.util.ContextUtils;
 import java.util.logging.Logger;
 import java.util.Iterator;
@@ -57,6 +60,9 @@ public class Citizen {
 	private static List<Citizen> citizens= new ArrayList<Citizen>();
 	HashMap<Integer, ArrayList<Integer>> edgeDetail;
 	String graphPath = "./data/10agent.graph";
+	HashMap<String, String> citizensEthoses;
+	int threshold = -1;
+	int threshold2 = 2;
 
 	
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens,
@@ -105,8 +111,8 @@ public class Citizen {
 			}
 		} else {
 			propSocialNetwork prop = new propSocialNetwork(this.noCitizens, this.graphPath);
+			citizensEthoses = prop.setEthoses(this.graphPath, this.noCitizens, this.threshold, this.threshold2);
 			this.edgeDetail = prop.setEdges(this.graphPath, this.noCitizens);
-			prop.getEdges(this.edgeDetail);
 			createNetwork(this.citizens, this.edgeDetail);
 			System.out.println("createNetwork ...... successfull ");
 		}
@@ -123,13 +129,19 @@ public class Citizen {
 	}
 		
 	private void createNetwork(List<Citizen> citizens, HashMap<Integer, ArrayList<Integer>> edgeDetail) {
-		Context<Object> context= ContextUtils.getContext(this);		
-		Network<Object> colNet =(Network<Object>)context.getProjection("social network");
-		colNet.addEdge(citizens.get(0), citizens.get(9));
-		colNet.addEdge(citizens.get(0), citizens.get(1));
-		colNet.addEdge(citizens.get(0), citizens.get(3));
-		colNet.addEdge(citizens.get(0), citizens.get(4));
-		colNet.addEdge(citizens.get(0), citizens.get(8));
+		Context<Object> context = ContextUtils.getContext(this);
+		context.remove(this);
+		
+		Network<Object> colNet = (Network<Object>)context.getProjection("social network");	
+		for(Map.Entry<Integer,ArrayList<Integer>> entry: edgeDetail.entrySet())
+      {
+          Integer key=entry.getKey();
+          ArrayList<Integer> values=entry.getValue();
+  			context.add(citizens.get(key));
+          for (int i = 0; i < values.size(); i++) {
+      		colNet.addEdge(citizens.get(key), citizens.get(i));
+          }
+      }
 		}
 	
 	// cascading

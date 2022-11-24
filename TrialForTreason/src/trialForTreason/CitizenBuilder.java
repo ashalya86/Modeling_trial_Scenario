@@ -106,33 +106,10 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 					perceptsRecieved, humanCount, grid, space));
 		}
 		
-//		NodeCreator nodeCreator = null;
-//		NetworkBuilder builder = new NetworkBuilder("Network", context, true);
-//		try {
-//			OPCPackage pkg = OPCPackage.open(new File("./data/sample.xlsx"));
-//			XSSFWorkbook wb = new XSSFWorkbook(pkg);
-//			builder.load("./data/sample.xlsx",
-//			NetworkFileFormat.EXCEL, nodeCreator);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InvalidFormatException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		Network net = builder.buildNetwork();
-		
-
 		WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);
 		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
 		netBuilder.buildNetwork();
-		Network<Object> colNet = (Network<Object>) context.getProjection("social network");	
-		
-		for (Object obj : context) {
-			NdPoint pt = space.getLocation(obj);
-			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
-		}
-		return context;
+				return context;
 	}
 }

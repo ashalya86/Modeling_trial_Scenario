@@ -25,7 +25,6 @@ public class propSocialNetwork {
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
-				System.out.println(data);
 				for (int i = 0; i < noCitizens; i++) {
 					String letter = Integer.toString(i);
 					if (data.startsWith(letter)) {
@@ -37,7 +36,6 @@ public class propSocialNetwork {
 						} else {
 							citizensDetail.put(letter, "Ethos2");
 						}
-						System.out.println(popertiesList.size());
 					}
 				}
 				if (data.endsWith("Edges")) {
@@ -49,8 +47,10 @@ public class propSocialNetwork {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
-		for (int i = 0; i < noCitizens; i++) {
-			System.out.println(citizensDetail.get(Integer.toString(i)));
+		for (String name : citizensDetail.keySet()) {
+			String key = name.toString();
+			String value = citizensDetail.get(name).toString();
+			System.out.println(key + " " + value);
 		}
 		return citizensDetail;
 	}

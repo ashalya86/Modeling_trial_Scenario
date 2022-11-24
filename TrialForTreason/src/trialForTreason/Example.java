@@ -1,10 +1,11 @@
 package trialForTreason;
 
-import java.io.File;  
 import java.io.FileInputStream;  
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.stat.StatUtils;
 import org.apache.poi.hssf.usermodel.HSSFSheet;  
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -19,36 +20,15 @@ public class Example
 {  
 public static void main(String args[]) throws IOException, InvalidFormatException  
 {  
-//obtaining input bytes from a file  
-//FileInputStream fis=new FileInputStream(new File("./data/book.xlsx"));  
-OPCPackage pkg = OPCPackage.open(new File("./data/agents10.xlsx"));
-XSSFWorkbook wb = new XSSFWorkbook(pkg);
-
-//creating workbook instance that refers to .xls file  
-//HSSFWorkbook wb=new HSSFWorkbook(fis);   
-//creating a Sheet object to retrieve the object  
-HashMap<String, String> citizensDetail = new HashMap<String, String>();
-
-XSSFSheet sheet=wb.getSheetAt(0);  
-//evaluating cell type   
-FormulaEvaluator formulaEvaluator=wb.getCreationHelper().createFormulaEvaluator();  
-for(Row row: sheet)     //iteration over row using for each loop  
-{  
-for(Cell cell: row)    //iteration over cell using for each loop  
-{  
-switch(formulaEvaluator.evaluateInCell(cell).getCellType())  
-{  
-case Cell.CELL_TYPE_NUMERIC:   //field that represents numeric cell type  
-//getting the value of the cell as a number  
-System.out.print(cell.getNumericCellValue()+ "\t\t");   
-break;  
-case Cell.CELL_TYPE_STRING:    //field that represents string cell type  
-//getting the value of the cell as a string  
-System.out.print(cell.getStringCellValue()+ "\t\t"); 
-break;  
-}  
-}  
-System.out.println("................");  
-}  
-}  
-}  
+	    double[] values = {9967,11281,10752,10576,2366,11882,11798};
+	    double variance = StatUtils.populationVariance(values);
+	    double sd = Math.sqrt(variance);
+	    double mean = StatUtils.mean(values);
+	    NormalDistribution nd = new NormalDistribution();
+	    for ( double value: values ) {
+	        double stdscore = (value-mean)/sd;
+	        double sf = 1.0 - nd.cumulativeProbability(Math.abs(stdscore));
+	        System.out.println("" + stdscore + " " + sf);
+	    
+	}
+} } 

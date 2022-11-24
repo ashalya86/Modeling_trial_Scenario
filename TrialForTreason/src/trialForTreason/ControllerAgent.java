@@ -33,16 +33,8 @@ public class ControllerAgent {
 
 	public static ArrayList<String> creatingAgentsEvents(int humanCount, String[] salientEvents) {
 		ArrayList<String> list = new ArrayList<String>();
-		Random randy = new Random();
 		for (int i = 0; i < humanCount; i++) {
-//			int actionNo = randy.nextInt(humanCount);
-//			if (actionNo < humanCount/2) {
-//				int salientNo = randy.nextInt(salientEvents.length);
-//				list.add(salientEvents[salientNo]);
-//			}
-//			else {
 			list.add("randEvent" + i);
-//			}
 		}
 		return list;
 	}
