@@ -108,7 +108,6 @@ public class Citizen {
 			propSocialNetwork prop = new propSocialNetwork(this.noCitizens, this.graphPath);
 			this.edgeDetail = prop.setEdges(this.graphPath, this.noCitizens);
 			//createNetwork(this.citizens, this.edgeDetail);
-			System.out.println("createNetwork ...... successfull ");
 		}
 		log.info("........................................................");
 	}

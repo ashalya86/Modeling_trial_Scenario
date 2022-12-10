@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -53,12 +54,16 @@ public class Jury {
 	int noOfCitizens;
 	private Grid<Object> grid;
 	private ContinuousSpace<Object> space;
+	int randomJurorsExactPostioin;
+	HashMap<Integer, ArrayList<Integer>> edgeDetail;
+	HashMap<String, String> citizensEthoses;
 
 	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
 
 	public Jury(String salientPrologPath, int humanCount, String[] salientEvents, int jurorsCount, Query queryConsult,
 			String lewisPrologPath, HashMap<String, String> perceptsRecieved, int noOfCitizens, Grid<Object> grid,
-	ContinuousSpace<Object> space) {
+			ContinuousSpace<Object> space, int randomJurorsExactPostioin,
+			HashMap<Integer, ArrayList<Integer>> edgeDetail, HashMap<String, String> citizensEthoses) {
 		this.salientPrologPath = salientPrologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;
@@ -69,7 +74,9 @@ public class Jury {
 		this.noOfCitizens = noOfCitizens;
 		this.grid = grid;
 		this.space = space;
-
+		this.randomJurorsExactPostioin = randomJurorsExactPostioin;
+		this.edgeDetail = edgeDetail;
+		this.citizensEthoses = citizensEthoses;
 	}
 
 	public Jury(ContinuousSpace<Object> space, Grid<Object> grid) {
@@ -83,7 +90,7 @@ public class Jury {
 	public void step() throws IOException {
 		log.info("*************************************************************");
 		Double tickcount = RepastEssentials.GetTickCount();
-		int currentTick = tickcount.intValue(); 
+		int currentTick = tickcount.intValue();
 		handShake(jurorsCount);
 		// scene1
 		if (currentTick < (noOfCitizens + 1)) {
@@ -94,15 +101,40 @@ public class Jury {
 			passingPublicSquare(currentTick, this.day, this.noOfCitizens, jurorsCount);
 			// scene3
 		} else {
-			//createNetwork(citizens);
+			gettingProportionOfEthoses(this.randomJurorsExactPostioin, this.edgeDetail, this.citizensEthoses);
 		}
 		publicSquareAttenders.clear();
 	}
-	
-	private void createNetwork(ArrayList<String> citizens) {
+
+	public void gettingProportionOfEthoses(int randomJurorsExactPostioin,
+			HashMap<Integer, ArrayList<Integer>> edgeDetail, HashMap<String, String> citizensEthoses) {
+		List connectedCitizenEthos = new ArrayList(); 
+		float countEthos1 = 0;
+		float countEthos2 = 0;
+		float sizeOfConnectedGroup = 0;
+		for (Map.Entry<String, String> ethos : citizensEthoses.entrySet()) {
+			int key1 = Integer.parseInt(ethos.getKey());
+			String values1 = ethos.getValue();
+				connectedCitizenEthos.add(values1);
+		}	
+		for (Map.Entry<Integer, ArrayList<Integer>> entry : edgeDetail.entrySet()) {
+			Integer key = entry.getKey();
+			ArrayList<Integer> values = entry.getValue();
+				if (key == randomJurorsExactPostioin) {
+					for (int k = 0; k < values.size(); k++) {
+						if(connectedCitizenEthos.get(values.get(k)) == "Ethos1") {
+							countEthos1 += 1;
+						}else if(connectedCitizenEthos.get(values.get(k)) == "Ethos2") {
+							countEthos2 += 1;
+						}
+						sizeOfConnectedGroup =values.size();
+					}
+				}
+		}
+		System.out.println(connectedCitizenEthos.toString()+ countEthos1+ ".."+ countEthos2+ ".."+ sizeOfConnectedGroup);
+		System.out.println("Proportion of Ethos1 in my group" + countEthos1/sizeOfConnectedGroup);
+		System.out.println("Proportion of Ethos2 in my group" + countEthos2/sizeOfConnectedGroup);
 	}
-
-
 
 	public void observingSalientEvents(String salientPrologPath, String adoptersEvent, int currentTick, int humanCount,
 			String[] salientEvents, int jurors_count) throws IOException {
@@ -183,6 +215,7 @@ public class Jury {
 	public void setCitizens(String citizen) {
 		this.citizens.add(citizen);
 	}
+
 	public void handShake(int juryCount) {
 		System.out.println("hello, I am a jury member " + (juryCount + 1));
 	}

@@ -151,7 +151,7 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		System.out.println("jurors_count " + jurorsCount);
 		for (int i = 0; i < jurorsCount; i++) {
 			jury = new Jury(cascadingPrologPath, noCitizen, salientEvents, i, queryConsult, lewisPrologPath,
-					perceptsRecieved, noCitizen, grid, space);
+					perceptsRecieved, noCitizen, grid, space, randomJurorsExactPostioins.get(i), edgeDetail, citizensEthoses);
 			for (int j = 0; j < juries.size(); j++) {
 				System.out.println("juries.get(j) " +  j + " "  + juries.get(j));
 				if (juries.get(j) != null) {
@@ -197,9 +197,9 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 			System.out.println(i);
 			System.out.println(colNet.getAdjacent(citizens.get(i)));
 		}
-		for (int i = 0; i < randomJurorsExactPostioins.size(); i++){
-			System.out.println(colNet.getAdjacent(juries.get(i)));
-		}
+//		for (int i = 0; i < randomJurorsExactPostioins.size(); i++){
+//			System.out.println(colNet.getAdjacent(juries.get(i)));
+//		}
 		return context;
 	}
 }
