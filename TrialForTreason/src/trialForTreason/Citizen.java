@@ -59,11 +59,10 @@ public class Citizen {
 	Citizen citizen;
 	private static List<Citizen> citizens= new ArrayList<Citizen>();
 	HashMap<Integer, ArrayList<Integer>> edgeDetail;
-	String graphPath = "./data/10agent.graph";
+	String graphPath = "./data/12Agents.graph";
 	HashMap<String, String> citizensEthoses;
 	int threshold = -1;
 	int threshold2 = 2;
-
 	
 	public Citizen(String action, String prologPath, String[] salientEvents, int humanCount, int noCitizens,
 			Query queryConsult, String lewisPrologPath, HashMap<String, String> perceptsRecieved,
@@ -92,15 +91,11 @@ public class Citizen {
 	@ScheduledMethod(start = 1, interval = 1, priority = ScheduleParameters.LAST_PRIORITY)
 	public void step() throws IOException {
 		log.info("........................................................");
-		Random randy = new Random();
+		//Random randy = new Random();
 		Double tickcount = RepastEssentials.GetTickCount();
 		currentTick = tickcount.intValue();
 		System.out.println("currentTick " + currentTick);
 		handShake(humanCount);
-		if (currentTick == 1) {
-			citizen = new Citizen(this.space, this.grid);
-			addCitizens(citizen);
-		}
 		if (currentTick <= noCitizens) {
 			scene1(this.humanCount, this.prologPath, this.currentTick, this.salientEvents, this.queryConsult);
 		} else if ((currentTick <= 2 * noCitizens) && (currentTick > noCitizens)) {
@@ -111,9 +106,8 @@ public class Citizen {
 			}
 		} else {
 			propSocialNetwork prop = new propSocialNetwork(this.noCitizens, this.graphPath);
-			citizensEthoses = prop.setEthoses(this.graphPath, this.noCitizens, this.threshold, this.threshold2);
 			this.edgeDetail = prop.setEdges(this.graphPath, this.noCitizens);
-			createNetwork(this.citizens, this.edgeDetail);
+			//createNetwork(this.citizens, this.edgeDetail);
 			System.out.println("createNetwork ...... successfull ");
 		}
 		log.info("........................................................");
@@ -128,7 +122,7 @@ public class Citizen {
 		this.citizens.add(citizen);
 	}
 		
-	private void createNetwork(List<Citizen> citizens, HashMap<Integer, ArrayList<Integer>> edgeDetail) {
+	public void createNetwork(List<Citizen> citizens, HashMap<Integer, ArrayList<Integer>> edgeDetail) {
 		Context<Object> context = ContextUtils.getContext(this);
 		context.remove(this);
 		

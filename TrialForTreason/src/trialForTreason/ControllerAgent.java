@@ -12,6 +12,8 @@ import org.jpl7.Term;
 
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.space.grid.Grid;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.engine.schedule.ScheduleParameters;
 
@@ -24,11 +26,18 @@ public class ControllerAgent {
 	String prologPath;
 	String[] salientEvents;
 	Query[] primitiveActionsQueries;
-
+	public Grid<Object> grid;
+	public ContinuousSpace<Object> space;
+	
 	public ControllerAgent(int human_count, String[] salientEvents, String prologPath) {
 		this.cascading_events = creatingAgentsEvents(human_count, salientEvents);
 		this.prologPath = prologPath;
 		this.salientEvents = salientEvents;
+	}
+	
+	public ControllerAgent(ContinuousSpace<Object> space, Grid<Object> grid) {
+		this.space = space;
+		this.grid = grid;
 	}
 
 	public static ArrayList<String> creatingAgentsEvents(int humanCount, String[] salientEvents) {
