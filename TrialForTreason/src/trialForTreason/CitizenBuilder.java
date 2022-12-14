@@ -57,13 +57,17 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		String cascadingPrologPath = "src/trialForTreason/cascadings.pl";
 		String lewisPrologPath = "src/trialForTreason/lewis_model_ck.pl";
 		String[] salientEvents = { "buildingWalls", "makingPalisades" };
-		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "A" };
+		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A",
+				"A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A",
+				"A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A" };
 		Query queryConsult;
 		HashMap<String, String> perceptsRecieved = new HashMap<String, String>();
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");
 		perceptsRecieved.put("affordance", "public_information");
-		String graphPath = "./data/12Agents.graph";
+		String graphPath = "./data/community.graph";
 		HashMap<String, String> citizensEthoses;
 		int threshold1 = -1;
 		int threshold2 = 2;
@@ -107,23 +111,23 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		}
 		System.out.println("}");
 		int noCitizen = humansCount - jurorsCount;
-		
+
 		propSocialNetwork prop = new propSocialNetwork(humansCount, graphPath);
-		//Setting ethoses for citizens from graph attributes 
+		// Setting ethoses for citizens from graph attributes
 		citizensEthoses = prop.setEthoses(graphPath, humansCount, threshold1, threshold2);
-		//getting all the nodes of citizens
+		// getting all the nodes of citizens
 		edgeDetail = prop.setEdges(graphPath, humansCount);
-		//prop.getEdges(edgeDetail);
-		//choosing jurors nodes
-		int [] nodeSize = prop.getMaximumNode(edgeDetail, humansCount);
+		// prop.getEdges(edgeDetail);
+		// choosing jurors nodes
+		int[] nodeSize = prop.getMaximumNode(edgeDetail, humansCount);
 		System.out.println("nodeSize " + Arrays.toString(nodeSize));
-		List<Integer> randomJurorsExactPostioins = prop.jurorsExactPossition(humansCount, nodeSize, jurorsCount, prop, edgeDetail);
+		List<Integer> randomJurorsExactPostioins = prop.jurorsExactPossition(humansCount, nodeSize, jurorsCount, prop,
+				edgeDetail);
 		System.out.println("randomJurorsExactPostioins " + randomJurorsExactPostioins.get(0));
 		System.out.println("randomJurorsExactPostioins " + randomJurorsExactPostioins.get(1));
 
 		queryConsult = new Query("consult", new Term[] { new Atom(cascadingPrologPath) });
 		context.add(new ControllerAgent(humansCount, salientEvents, cascadingPrologPath));
-		
 
 		// Create citizens and Separating jurors from citizens
 		for (int i = 0; i < humansCount; i++) {
@@ -136,24 +140,25 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 					int lastIndexJurors = juries.size() - 1;
 					juries.remove(lastIndexJurors);
 					juries.add(citizen);
-					//int lastIndexCitizens = citizens.size() - 1;
-					//citizens.remove(lastIndexCitizens);
-					//citizens.add(null);
+					// int lastIndexCitizens = citizens.size() - 1;
+					// citizens.remove(lastIndexCitizens);
+					// citizens.add(null);
 				}
-			}		
+			}
 			context.add(citizen);
 		}
 
 		System.out.println("juries " + juries.size());
 		System.out.println("citizens " + citizens.size());
-	
+
 		// Create jurors
 		System.out.println("jurors_count " + jurorsCount);
 		for (int i = 0; i < jurorsCount; i++) {
 			jury = new Jury(cascadingPrologPath, noCitizen, salientEvents, i, queryConsult, lewisPrologPath,
-					perceptsRecieved, noCitizen, grid, space, randomJurorsExactPostioins.get(i), edgeDetail, citizensEthoses);
+					perceptsRecieved, noCitizen, grid, space, randomJurorsExactPostioins.get(i), edgeDetail,
+					citizensEthoses);
 			for (int j = 0; j < juries.size(); j++) {
-				System.out.println("juries.get(j) " +  j + " "  + juries.get(j));
+				System.out.println("juries.get(j) " + j + " " + juries.get(j));
 				if (juries.get(j) != null) {
 					juries.set(j, jury);
 					context.add(jury);
@@ -161,31 +166,31 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 			}
 		}
 
-		for (int i = 0; i < randomJurorsExactPostioins.size(); i++){
+		for (int i = 0; i < randomJurorsExactPostioins.size(); i++) {
 			randomJurorsExactPostioins.get(i);
 		}
 
-		//Create a social network
+		// Create a social network
 		WattsBetaSmallWorldGenerator wattsBetaSmallWorldGenerator = new WattsBetaSmallWorldGenerator(0.5, 4, true);
 		NetworkBuilder<Object> netBuilder = new NetworkBuilder<Object>("social network", context, true);
 		netBuilder.setGenerator(wattsBetaSmallWorldGenerator);
 		netBuilder.buildNetwork();
-				
+
 		Network<Object> colNet = (Network<Object>) context.getProjection("social network");
-		//Remove old edges
+		// Remove old edges
 		colNet.removeEdges();
 		for (Map.Entry<Integer, ArrayList<Integer>> entry : edgeDetail.entrySet()) {
 			Integer key = entry.getKey();
 			ArrayList<Integer> values = entry.getValue();
-			System.out.println(key + " : " +  values.toString() );
+			System.out.println(key + " : " + values.toString());
 			for (int j = 0; j < jurorsCount; j++) {
 				if (key == randomJurorsExactPostioins.get(j)) {
 					for (int k = 0; k < values.size(); k++) {
 						colNet.addEdge(juries.get(key), citizens.get(k));
 						context.add(juries.get(key));
-						System.out.println(key + " .. " + juries.get(key) + " .... " +  citizens.get(k) );
+						System.out.println(key + " .. " + juries.get(key) + " .... " + citizens.get(k));
 					}
-				}else {
+				} else {
 					for (int l = 0; l < values.size(); l++) {
 						colNet.addEdge(citizens.get(key), citizens.get(l));
 						context.add(citizens.get(key));
