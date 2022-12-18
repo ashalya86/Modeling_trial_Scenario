@@ -113,7 +113,7 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");
 		perceptsRecieved.put("affordance", "public_information");
-		String graphPath = "./data/12Agents.graph";
+		String graphPath = "./data/500Agents.graph";
 		HashMap<String, String> citizensEthoses;
 		int threshold1 = -1;
 		int threshold2 = 2;
