@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -41,6 +42,8 @@ public class Jury {
 	ArrayList<String> adoptersEvents = new ArrayList<String>();
 	ArrayList<String> publicSquareAttenders = new ArrayList<String>();
 	ArrayList<String> citizens = new ArrayList<String>();
+	ArrayList<Double> proportionsEthos1 = new ArrayList<Double>();
+	ArrayList<Double> proportionsEthos2 = new ArrayList<Double>();
 
 	String salientPrologPath;
 	String lewisPrologPath;
@@ -57,6 +60,8 @@ public class Jury {
 	int randomJurorsExactPostioin;
 	HashMap<Integer, ArrayList<Integer>> edgeDetail;
 	HashMap<String, String> citizensEthoses;
+	double proportionEthos1;
+	double proportionEthos2;
 
 	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
 
@@ -102,8 +107,18 @@ public class Jury {
 			// scene3
 		} else {
 			gettingProportionOfEthoses(this.randomJurorsExactPostioin, this.edgeDetail, this.citizensEthoses);
+				//System.out.println(proportionsEthos1);
+				//System.out.println(proportionsEthos2);
+			    Double averageEthos1 = proportionsEthos1.stream().mapToDouble(val -> val).average().orElse(0.0);
+			    Double averageEthos2 = proportionsEthos2.stream().mapToDouble(val -> val).average().orElse(0.0);
+				System.out.println("common knowledge of ethos1 among jurors group (averageEthos1) " + averageEthos1);
+				System.out.println("common knowledge of ethos1 among jurors group (averageEthos2) " + averageEthos2);
+
+
 		}
 		publicSquareAttenders.clear();
+		proportionsEthos1.clear();
+		proportionsEthos2.clear();
 	}
 
 	public void gettingProportionOfEthoses(int randomJurorsExactPostioin,
@@ -127,13 +142,17 @@ public class Jury {
 						}else if(connectedCitizenEthos.get(values.get(k)) == "Ethos2") {
 							countEthos2 += 1;
 						}
-						sizeOfConnectedGroup =values.size();
+						sizeOfConnectedGroup = values.size();
 					}
 				}
 		}
 		System.out.println(connectedCitizenEthos.toString()+ countEthos1+ ".."+ countEthos2+ ".."+ sizeOfConnectedGroup);
-		System.out.println("Proportion of Ethos1 in my group" + countEthos1/sizeOfConnectedGroup);
-		System.out.println("Proportion of Ethos2 in my group" + countEthos2/sizeOfConnectedGroup);
+		proportionEthos1 = countEthos1/sizeOfConnectedGroup;
+		proportionEthos2 = countEthos2/sizeOfConnectedGroup;
+		passProportions(proportionEthos1, proportionEthos2);
+		System.out.println("Proportion of Ethos1 in my group" + proportionEthos1);
+		System.out.println("Proportion of Ethos2 in my group" + proportionEthos2);
+
 	}
 
 	public void observingSalientEvents(String salientPrologPath, String adoptersEvent, int currentTick, int humanCount,
@@ -198,6 +217,23 @@ public class Jury {
 				System.out.println("I'm not attending the sqaure today ");
 			}
 		}
+	}
+
+	public void passProportions(double proportionEthos1, double proportionEthos2) {
+		Context context = ContextUtils.getContext(this);
+		Iterable<Jury> i = context.getAgentLayer(Jury.class);
+		Iterator<Jury> it = i.iterator();
+		int index = 0;
+		while (it.hasNext()) {
+			Jury j = it.next();
+			j.setProportions(proportionEthos1, proportionEthos2);
+			index++;
+		}
+	}
+	
+	public void setProportions(double proportionEthos1, double proportionEthos2) {
+		this.proportionsEthos1.add(proportionEthos1);
+		this.proportionsEthos2.add(proportionEthos2);
 	}
 
 	public void setAdoptersEvent(String event, int humanCount) {
