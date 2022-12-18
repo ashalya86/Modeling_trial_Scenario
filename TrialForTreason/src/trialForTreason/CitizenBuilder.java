@@ -57,13 +57,58 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		String cascadingPrologPath = "src/trialForTreason/cascadings.pl";
 		String lewisPrologPath = "src/trialForTreason/lewis_model_ck.pl";
 		String[] salientEvents = { "buildingWalls", "makingPalisades" };
-		String[] actions = {"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "A"};
- //		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A",
-//				"A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A",
-//				"A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A",
-//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-//				"R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A" };
-		Query queryConsult;
+		//String[] actions = {"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "A"};
+ 		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"};
+		Query queryConsult;	
 		HashMap<String, String> perceptsRecieved = new HashMap<String, String>();
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");

@@ -7,13 +7,13 @@
 									
 		/>
 				<parameter name="human_count" displayName="Human Count" type="int" 
-						defaultValue="12" 
+						defaultValue="1000" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
 				<parameter name="jurors_count" displayName="Jurors Count" type="int" 
-						defaultValue="2" 
+						defaultValue="5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
