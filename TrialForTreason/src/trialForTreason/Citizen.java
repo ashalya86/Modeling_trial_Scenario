@@ -162,7 +162,7 @@ public class Citizen {
 //	attendingPublicSquare 
 	public void scene2FestivalDay(int humanCount, int noOfCitizens) {
 		int randNo = this.randy.nextInt(noOfCitizens);
-		if (randNo < (noOfCitizens * 0.95)) {
+		if (randNo < (noOfCitizens * 0.85)) {
 			System.out.println("It is festival!!!!, I'm attending public forum");
 			passPublicSquareAttenders(humanCount, "festival");
 		}

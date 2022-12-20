@@ -57,63 +57,63 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		String cascadingPrologPath = "src/trialForTreason/cascadings.pl";
 		String lewisPrologPath = "src/trialForTreason/lewis_model_ck.pl";
 		String[] salientEvents = { "buildingWalls", "makingPalisades" };
-		//String[] actions = {"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "A"};
- 		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
-				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
-				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
-				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"};
+		String[] actions = {"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "A"};
+// 		String[] actions = { "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"
+//				,"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A", "R", "R", "R", "A", "A", "A", "A", "A", "A", "A",
+//				"A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A"};
 		Query queryConsult;	
 		HashMap<String, String> perceptsRecieved = new HashMap<String, String>();
 		perceptsRecieved.put("monument", "m27");
 		perceptsRecieved.put("status", "traitor(hipparchus)");
 		perceptsRecieved.put("affordance", "public_information");
-		String graphPath = "./data/500Agents.graph";
+		String graphPath = "./data/12Agents.graph";
 		HashMap<String, String> citizensEthoses;
 		int threshold1 = -1;
 		int threshold2 = 2;
@@ -202,7 +202,7 @@ public class CitizenBuilder implements ContextBuilder<Object> {
 		for (int i = 0; i < jurorsCount; i++) {
 			jury = new Jury(cascadingPrologPath, noCitizen, salientEvents, i, queryConsult, lewisPrologPath,
 					perceptsRecieved, noCitizen, grid, space, randomJurorsExactPostioins.get(i), edgeDetail,
-					citizensEthoses);
+					citizensEthoses,  jurorsCount);
 			for (int j = 0; j < juries.size(); j++) {
 				System.out.println("juries.get(j) " + j + " " + juries.get(j));
 				if (juries.get(j) != null) {

@@ -62,13 +62,14 @@ public class Jury {
 	HashMap<String, String> citizensEthoses;
 	double proportionEthos1;
 	double proportionEthos2;
+	int noOfJurors;
 
 	ScheduleParameters params = ScheduleParameters.createRepeating(11, 1);
 
 	public Jury(String salientPrologPath, int humanCount, String[] salientEvents, int jurorsCount, Query queryConsult,
 			String lewisPrologPath, HashMap<String, String> perceptsRecieved, int noOfCitizens, Grid<Object> grid,
 			ContinuousSpace<Object> space, int randomJurorsExactPostioin,
-			HashMap<Integer, ArrayList<Integer>> edgeDetail, HashMap<String, String> citizensEthoses) {
+			HashMap<Integer, ArrayList<Integer>> edgeDetail, HashMap<String, String> citizensEthoses, int noOfJurors) {
 		this.salientPrologPath = salientPrologPath;
 		this.humanCount = humanCount;
 		this.salientEvents = salientEvents;
@@ -82,6 +83,7 @@ public class Jury {
 		this.randomJurorsExactPostioin = randomJurorsExactPostioin;
 		this.edgeDetail = edgeDetail;
 		this.citizensEthoses = citizensEthoses;
+		this.noOfJurors = noOfJurors;
 	}
 
 	public Jury(ContinuousSpace<Object> space, Grid<Object> grid) {
@@ -124,22 +126,26 @@ public class Jury {
 	public void gettingProportionOfEthoses(int randomJurorsExactPostioin,
 			HashMap<Integer, ArrayList<Integer>> edgeDetail, HashMap<String, String> citizensEthoses) {
 		List connectedCitizenEthos = new ArrayList(); 
+		List CitizenEthoses  = new ArrayList();
 		float countEthos1 = 0;
 		float countEthos2 = 0;
 		float sizeOfConnectedGroup = 0;
+		//getting all citizens ethoses in to list
 		for (Map.Entry<String, String> ethos : citizensEthoses.entrySet()) {
 			int key1 = Integer.parseInt(ethos.getKey());
 			String values1 = ethos.getValue();
-				connectedCitizenEthos.add(values1);
+				CitizenEthoses.add(values1);
 		}	
+		//Getting ethoses for connected nodes
 		for (Map.Entry<Integer, ArrayList<Integer>> entry : edgeDetail.entrySet()) {
 			Integer key = entry.getKey();
 			ArrayList<Integer> values = entry.getValue();
 				if (key == randomJurorsExactPostioin) {
 					for (int k = 0; k < values.size(); k++) {
-						if(connectedCitizenEthos.get(values.get(k)) == "Ethos1") {
+						connectedCitizenEthos.add(CitizenEthoses.get(values.get(k)));
+						if(CitizenEthoses.get(values.get(k)) == "Ethos1") {
 							countEthos1 += 1;
-						}else if(connectedCitizenEthos.get(values.get(k)) == "Ethos2") {
+						}else if(CitizenEthoses.get(values.get(k)) == "Ethos2") {
 							countEthos2 += 1;
 						}
 						sizeOfConnectedGroup = values.size();
@@ -152,7 +158,7 @@ public class Jury {
 		passProportions(proportionEthos1, proportionEthos2);
 		System.out.println("Proportion of Ethos1 in my group" + proportionEthos1);
 		System.out.println("Proportion of Ethos2 in my group" + proportionEthos2);
-
+		connectedCitizenEthos.clear();
 	}
 
 	public void observingSalientEvents(String salientPrologPath, String adoptersEvent, int currentTick, int humanCount,
@@ -183,8 +189,9 @@ public class Jury {
 					"I'm a jury member" + (jurorsCount + 1) + "passing the public Square at tick " + (currentTick - 1));
 			System.out.println("I'm observing a festival");
 			if (publicSquareAttenders.size() > (noOfCitizens * 0.85)) {
+//				System.out.println(".......... " + publicSquareAttenders.size() + noOfCitizens);
 				System.out
-						.println("I perceive certain threshhold " + (publicSquareAttenders.size() * 100) / noOfCitizens
+						.println("I perceive certain threshhold " + ((publicSquareAttenders.size() - this.noOfJurors) * 100) / noOfCitizens
 								+ "% of citizens in the festival" + publicSquareAttenders);
 				CKofMonument ck = new CKofMonument(this.lewisPrologPath, currentTick, this.perceptsRecieved,
 						queryConsult);
@@ -195,7 +202,7 @@ public class Jury {
 				}
 			} else {
 				System.out.println("I don't perceive certain threshhold of citizens in the festival. It is only "
-						+ (publicSquareAttenders.size() * 100) / noOfCitizens + "% " + publicSquareAttenders);
+						+ ((publicSquareAttenders.size() - this.noOfJurors) * 100) / noOfCitizens + "% " + publicSquareAttenders);
 			}
 		}
 		if (day == "normal") {
